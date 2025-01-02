@@ -13,6 +13,8 @@ services:
       - 8000:80
     depends_on:
       - mysql-db
+    networks:
+      - app-network
 
   mysql-db:
     image: mysql:8.0
@@ -23,6 +25,9 @@ services:
       MYSQL_PASSWORD: password
     ports:
       - "3307:3306"
+    networks:
+      - app-network
+
   phpmyadmin:
     image: phpmyadmin/phpmyadmin
     links:
@@ -32,3 +37,9 @@ services:
     environment:
       PMA_HOST: mysql-db
       MYSQL_ROOT_PASSWORD: password
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge

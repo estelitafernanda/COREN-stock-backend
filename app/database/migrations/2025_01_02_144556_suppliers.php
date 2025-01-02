@@ -11,10 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('sectors', function (Blueprint $table) {
-            $table->id('idSector')->primary();
+        Schema::create('suppliers', function (Blueprint $table) {
+            $table->id('idSupplier');
+            $table->string('corporateReason');
             $table->string('name');
-            $table->string('headSector');
+            $table->string('address');
+            $table->string('contact');
             $table->timestamps();
         });
     }
@@ -24,6 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('sectors');
+        Schema::dropIfExists('suppliers');
     }
 };
