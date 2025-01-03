@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('products', function (Blueprint $table) {
             $table->id('code')->primary();
-            $table->foreignId('idDepartment')->constrained('sectors'); 
+            $table->foreignId('idDepartment')->constrained('sectors'); // Corrigido para 'idDepartment'
             $table->string('nameProduct');
             $table->text('describe');
             $table->integer('minQuantity');
@@ -22,7 +22,7 @@ return new class extends Migration
             $table->date('validity');
             $table->float('unitPrice');
         });
-
+        
     }
 
     /**
