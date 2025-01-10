@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('request', function (Blueprint $table) {
             $table->id('idRequest')->primary();
             $table->unsignedBigInteger('idUser');
-            $table->foreign('idUser')->references('id')->on('users'); 
+            $table->foreign('idUser')->references('idUser')->on('users'); 
             $table->string('describe');
             $table->date('requestDate');
             $table->integer('quantity');

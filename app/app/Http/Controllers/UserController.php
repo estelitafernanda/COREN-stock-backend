@@ -53,28 +53,31 @@ class UserController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show(string $idUser)
     {
-        $user = User::findOrFail($id);
+        $user = User::findOrFail($idUser);
         return view('users.show', compact('user'));
     }
 
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
+    public function edit(string $idUser)
     {
-        $user = User::findOrFail($id);
+        $user = User::findOrFail($idUser);
         return view('users.edit', compact('user'));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request, string $idUser)
     {
         try {
-            $user = $this->updateUser->execute($id, $request->all());
+            $user = User::findOrFail($idUser);
+    
+            $this->updateUser->execute($idUser, $request->all());
+    
             return redirect()->route('users.index')->with('success', 'Usuário atualizado com sucesso!');
         } catch (\Exception $e) {
             return back()->with('error', 'Erro ao atualizar o usuário: ' . $e->getMessage());
@@ -84,10 +87,10 @@ class UserController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(string $idUser)
     {
         try {
-            $this->deleteUser->execute($id);
+            $this->deleteUser->execute($idUser);
             return redirect()->route('users.index')->with('success', 'Usuário excluído com sucesso!');
         } catch (\Exception $e) {
             return back()->with('error', 'Erro ao excluir o usuário: ' . $e->getMessage());

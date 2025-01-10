@@ -16,7 +16,7 @@ return new class extends Migration
             $table->foreignId('idProduct')->constrained('products', 'code'); 
             $table->integer('quantity');
             $table->date('movementDate');
-            $table->foreignId('idResponsible')->constrained('users');
+            $table->foreignId('idResponsible')->constrained('users', 'idUser');
             $table->foreignId('idOriginSector')->constrained('sectors');
             $table->foreignId('idDestinationSector')->constrained('sectors');
             $table->string('movementStatus');

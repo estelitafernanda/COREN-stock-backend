@@ -10,10 +10,13 @@ use App\Http\Controllers\SuppliersController;
 Route::get('/', function () {
     return view('welcome');
 });
+Route::post('/users', [UserController::class, 'store'])->name('users.store');
+Route::get('/users/create', [UserController::class, 'create'])->name('users.create'); 
+Route::get('/users', [UserController::class, 'index'])->name('users.index');
+Route::get('/users/{idUser}', [UserController::class,'show'])->name('users.show');
+Route::get('/users/{idUser}/edit', [UserController::class, 'edit'])->name('users.edit'); 
+Route::put('/users/{idUser}/update', [UserController::class, 'update'])->name('users.update');
 
-Route::get('/users/create', [UserController::class, 'create'])->name('users.create'); // Formulário de criação
-Route::get('/users', [UserController::class, 'index'])->name('users.index'); // Ação de armazenamento
-Route::get('/users/{id}', [UserController::class,'show'])->name('users.show');
 /*Route::get('/product/create', [ProductController::class, 'create']->name('product.create'));
 Route::post('/product', [ProductController::class, 'store'])->name('product.store');
 

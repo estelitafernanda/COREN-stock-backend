@@ -1,5 +1,4 @@
 <?php
-
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -13,14 +12,13 @@ return new class extends Migration
     {
         Schema::create('sessions', function (Blueprint $table) {
             $table->string('id')->primary();
-            $table->foreignId('user_id')->nullable()->constrained()->onDelete('cascade');  // Isso adiciona a coluna user_id
+            $table->foreignId('user_id')->nullable()->constrained('users', 'idUser')->onDelete('cascade'); 
             $table->text('payload');
             $table->integer('last_activity');
-            $table->ipAddress('ip_address');  // Caso queira registrar o IP
-            $table->string('user_agent');  // Caso queira registrar o User Agent
+            $table->ipAddress('ip_address')->nullable(); 
+            $table->string('user_agent')->nullable(); 
             $table->timestamps();
         });
-        
     }
 
     /**
