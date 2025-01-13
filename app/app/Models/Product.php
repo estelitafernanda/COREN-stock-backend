@@ -10,15 +10,6 @@ class Product extends Model
     use HasFactory;
 
     protected $table = 'products';
-<<<<<<< HEAD
-    protected $primaryKey = 'code';
-    public $timestamps = false;
-
-    protected $fillable = [
-        'nameProduct',
-        'idDepartment',
-        'describe',
-=======
     protected $primaryKey = 'idProduct';
     public $timestamps = false;
 
@@ -30,13 +21,13 @@ class Product extends Model
         'code',
         'describe',
         'category',
->>>>>>> 7203ce1aa315dcb84ce7fe741d69c3138bd2e9ec
         'minQuantity',
         'currentQuantity',
         'location',
         'validity',
         'unitPrice',
     ];
+   
 
     public function sector()
     {

@@ -1,10 +1,6 @@
 @extends('layouts.app')
 
-<<<<<<< HEAD
-<h1>Lista de Produtos</h1>
-=======
 <h1>Lista de Usuários</h1>
->>>>>>> 7203ce1aa315dcb84ce7fe741d69c3138bd2e9ec
 <table>
     <thead>
         <tr>

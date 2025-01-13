@@ -16,7 +16,7 @@ class RequestController extends Controller
     public function index()
     {
         $dados = RequestModel::all();
-        return view('request.index', compact('dados'));
+        return view('requests.index', compact('dados'));
     }
 
     /**
@@ -24,7 +24,7 @@ class RequestController extends Controller
      */
     public function create()
     {
-        return view('request.create');
+        return view('requests.create');
     }
 
     /**
@@ -34,6 +34,7 @@ class RequestController extends Controller
     {
         $validated = $request->validate([
             'idRequest' => 'required|integer|unique:requests,idRequest',
+            'idUser' => 'required|integer|unique:requests,idUser',
             'describe' => 'required|string|max:255',
             'requestDate' => 'required|date',
             'quantity' => 'required|integer|min:1',
@@ -41,7 +42,7 @@ class RequestController extends Controller
 
         $createRequest->execute($validated);
 
-        return redirect()->route('request.index')->with('success', 'Requisição criada com sucesso!');
+        return redirect()->route('requests.index')->with('success', 'Requisição criada com sucesso!');
     }
 
     /**
@@ -50,7 +51,7 @@ class RequestController extends Controller
     public function show(string $id)
     {
         $request = RequestModel::findOrFail($id);
-        return view('request.show', compact('request'));
+        return view('requests.show', compact('request'));
     }
 
     /**
@@ -59,7 +60,7 @@ class RequestController extends Controller
     public function edit(string $id)
     {
         $request = RequestModel::findOrFail($id);
-        return view('request.edit', compact('request'));
+        return view('requests.edit', compact('request'));
     }
 
     /**
@@ -78,7 +79,7 @@ class RequestController extends Controller
 
         $updateRequest->execute($requestData, $validated);
 
-        return redirect()->route('request.index')->with('success', 'Requisição atualizada com sucesso!');
+        return redirect()->route('requests.index')->with('success', 'Requisição atualizada com sucesso!');
     }
 
     /**
@@ -88,6 +89,6 @@ class RequestController extends Controller
     {
         $deleteRequest->execute($id);
 
-        return redirect()->route('request.index')->with('success', 'Requisição excluída com sucesso!');
+        return redirect()->route('requests.index')->with('success', 'Requisição excluída com sucesso!');
     }
 }

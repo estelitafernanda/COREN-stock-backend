@@ -9,12 +9,13 @@ class RequestModel extends Model
 {
     use HasFactory;
 
-    protected $table = 'requests';
+    protected $table = 'request';
     protected $primaryKey = 'idRequest';
     public $timestamps = false;
 
     protected $fillable = [
         'describe',
+        'idUser',
         'requestDate',
         'quantity',
     ];
