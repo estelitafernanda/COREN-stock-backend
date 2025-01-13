@@ -10,13 +10,26 @@ use App\UseCases\Product\DeleteProduct;
 
 class ProductController extends Controller
 {
+
+    protected $createProduct;
+    protected $deleteProduct;
+    protected $updateProduct;
+
+    public function __construct(CreateProduct $createProduct, DeleteProduct $deleteProduct, UpdateProduct $updateProduct)
+    {
+        $this->createProduct = $createProduct;
+        $this->deleteProduct = $deleteProduct;
+        $this->updateProduct = $updateProduct;
+    }
+
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        $dados = Product::all();
-        return view('product.index', compact('dados'));
+
+        $products = Product::all();
+        return view('product.index', compact('products'));
     }
 
     /**
@@ -34,6 +47,27 @@ class ProductController extends Controller
     {
         $useCase = new CreateProduct();
         return $useCase->execute($request);
+        try {
+
+            if($request->hasFile('image') && $request->file('image')->isValid()){
+                
+                $requestImage = $request->file('image'); 
+
+                $extension = $requestImage->extension();
+
+                $imageName = md5($requestImage->getClientOriginalName() . strtotime("now")) . "." . $extension;
+
+                $requestImage->move(public_path('images/products'), $imageName);  
+
+                $request->merge(['image' => $imageName]);
+            };
+            
+            $product = $this->createProduct->execute($request->all());
+
+            return redirect()->route('products.index')->with('success', 'Produto criado com sucesso!');
+        } catch (\Exception $e) {
+            return back()->with('error', 'Erro ao criar o Produto: ' . $e->getMessage());
+        }
     }
 
     /**
