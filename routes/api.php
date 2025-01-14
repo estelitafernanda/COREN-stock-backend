@@ -15,3 +15,4 @@ Route::get('/user', function (Request $request) {
 
 Route::get('show', [ProductController::class, 'index']);
 
+Route::post('addProduct', [ProductController::class, 'store']);

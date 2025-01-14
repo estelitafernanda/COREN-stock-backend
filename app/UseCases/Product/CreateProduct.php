@@ -21,6 +21,10 @@ class CreateProduct
             $imageName = md5($requestImage->getClientOriginalName() . strtotime("now")) . "." . $extension;
             $data['image'] = strval($imageName);
         }
+
+        if ($data['validity'] === null) {
+            $data['validity'] = 'Não Perecivel';
+        }
         
         $validated = validator($data, [
             'nameProduct' => 'required|string|max:255',
