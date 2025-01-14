@@ -34,6 +34,7 @@ class RequestController extends Controller
     {
         $validated = $request->validate([
             'idRequest' => 'required|integer|unique:requests,idRequest',
+            'idProduct' => 'required|integer|unique:requests,idProduct',
             'idUser' => 'required|integer|unique:requests,idUser',
             'describe' => 'required|string|max:255',
             'requestDate' => 'required|date',
@@ -72,6 +73,7 @@ class RequestController extends Controller
 
         $validated = $request->validate([
             'idRequest' => 'required|integer|unique:requests,idRequest,' . $id,
+            'idProduct' => 'required|integer|unique:requests,idProduct',
             'describe' => 'required|string|max:255',
             'requestDate' => 'required|date',
             'quantity' => 'required|integer|min:1',

@@ -34,6 +34,7 @@ class ResponseController extends Controller
     {
         $validated = $request->validate([
             'idResponse' => 'required|integer', 
+            'isValid' => 'required|boolean',
             'response' => 'required|string|max:255', 
         ]);
 
