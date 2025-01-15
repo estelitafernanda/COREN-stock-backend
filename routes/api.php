@@ -14,5 +14,6 @@ Route::get('/user', function (Request $request) {
 })->middleware('auth:sanctum');
 
 Route::get('show', [ProductController::class, 'index']);
+Route::get('users', [UserController::class, 'index']);
 
 Route::post('addProduct', [ProductController::class, 'store']);

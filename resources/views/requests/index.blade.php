@@ -16,8 +16,8 @@
             <td>{{ $request->quantity }}</td>
             <td>{{ $request->requestDate }}</td>
             <td>
-                <a href="{{ route('requests.show', $user->idUser) }}">Ver</a>
-                <a href="{{ route('requests.edit', $user->idUser) }}">Editar</a>
+                <a href="{{ route('requests.show', $request->idRequest) }}">Ver</a>
+                <a href="{{ route('requests.edit', $request->idRequest) }}">Editar</a>
             </td>
         </tr>
         @endforeach

@@ -7,9 +7,23 @@ use App\Models\RequestModel;
 use App\UseCases\Request\CreateRequest;
 use App\UseCases\Request\UpdateRequest;
 use App\UseCases\Request\DeleteRequest;
+use App\Models\Product;
+use App\Models\User;
 
 class RequestController extends Controller
 {
+
+     // Declare a variável para o CreateRequest
+     private $createRequest;
+
+     // Injeção de dependência no construtor
+     public function __construct(CreateRequest $createRequest)
+     {
+         // Atribuindo o serviço CreateRequest à propriedade
+         $this->createRequest = $createRequest;
+     }
+ 
+
     /**
      * Display a listing of the resource.
      */
@@ -24,26 +38,23 @@ class RequestController extends Controller
      */
     public function create()
     {
-        return view('requests.create');
+        $users = User::all();
+        $products = Product::all();
+        return view('requests.create', compact('products', 'users'));
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request, CreateRequest $createRequest)
+    public function store(Request $request)
     {
-        $validated = $request->validate([
-            'idRequest' => 'required|integer|unique:requests,idRequest',
-            'idProduct' => 'required|integer|unique:requests,idProduct',
-            'idUser' => 'required|integer|unique:requests,idUser',
-            'describe' => 'required|string|max:255',
-            'requestDate' => 'required|date',
-            'quantity' => 'required|integer|min:1',
-        ]);
-
-        $createRequest->execute($validated);
-
-        return redirect()->route('requests.index')->with('success', 'Requisição criada com sucesso!');
+        try {
+            $resquestion = $this->createRequest->execute($request->all());
+            return redirect()->route('requests.index')->with('success', 'Pedido criado com sucesso!');
+        } catch (\Exception $e) {
+            return back()->with('error', 'Erro ao criar o pedido: ' . $e->getMessage());
+        }
+        
     }
 
     /**

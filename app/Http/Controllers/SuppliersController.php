@@ -15,8 +15,8 @@ class SuppliersController extends Controller
      */
     public function index()
     {
-        $dados = Supplier::all();
-        return view('supplier.index', compact('dados'));
+        $supplier = Supplier::all();
+        return $supplier;
     }
 
     /**
@@ -24,7 +24,8 @@ class SuppliersController extends Controller
      */
     public function create()
     {
-        return view('supplier.create');
+        $supplier = Supplier::all();
+        return view('suppliers.create', compact('supplier'));
     }
 
     /**
@@ -33,6 +34,7 @@ class SuppliersController extends Controller
     public function store(Request $request, CreateSupplier $createSupplier)
     {
         $validated = $request->validate([
+            'idSupplier' => 'required|integer|unique:suppliers,idSupplier',
             'corporateReason' => 'required|string|max:255',
             'name' => 'required|string|max:255',
             'address' => 'required|string|max:255',

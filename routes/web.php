@@ -6,6 +6,7 @@ use App\Http\Controllers\ProductController;
 use App\Http\Controllers\MovementController;
 use App\Http\Controllers\RequestController;
 use App\Http\Controllers\SuppliersController;
+use App\Http\Controllers\SectorController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -32,6 +33,16 @@ Route::get('/requests/{idRequest}', [RequestController::class,'show'])->name('re
 Route::get('/requests{idRequest}/edit', [RequestController::class, 'edit'])->name('requests.edit'); 
 Route::put('/requests/{idRequest}/update', [RequestController::class, 'update'])->name('requests.update');
 
+Route::post('/sectors', [SectorController::class, 'store'])->name('sectors.store');
+Route::get('/sectors/create', [SectorController::class, 'create'])->name('sectors.create'); 
+Route::get('/sectors', [SectorController::class, 'index'])->name('sectors.index');
+Route::get('/sectors/{idSector}', [SectorController::class,'show'])->name('sectors.show');
+Route::get('/sectors/{idSector}/products', [SectorController::class, 'listProducts'])->name('sectors.products');
+Route::get('/sectors/{idSector}/target-products', [SectorController::class, 'targetProducts'])->name('sectors.target-products');
+
+Route::post('/suppliers', [SuppliersController::class, 'store'])->name('suppliers.store');
+Route::get('/suppliers/create', [SuppliersController::class, 'create'])->name('suppliers.create');
+Route::get('/suppliers', [SuppliersController::class, 'index'])->name('suppliers.index');
 
 /*Route::get('/product/create', [ProductController::class, 'create']->name('product.create'));
 Route::post('/product', [ProductController::class, 'store'])->name('product.store');
@@ -39,7 +50,5 @@ Route::post('/product', [ProductController::class, 'store'])->name('product.stor
 Route::get('/movement/create', [MovementController::class, 'create']->name('movement.create'));
 Route::post('/movement', [MovementController::class, 'store'])->name('movement.store');
 
-Route::get('/supplier/create', [SuppliersController::class, 'create']->name('supplier.create'));
-Route::post('/supplier', [SuppliersController::class, 'store'])->name('supplier.store');
 */
 

@@ -18,29 +18,50 @@
         @endif
 
         {{-- Formulário de criação de pedido --}}
-        <form action="{{ route('requests.store') }}" method="POST" enctype="multipart/form-data">
-            @csrf  {{-- Garante que o formulário seja seguro contra ataques CSRF --}}
-            
+        <form action="{{ route('requests.store') }}" method="POST">
+            @csrf
+
+            <!-- Campo para selecionar o produto -->
+            <div class="form-group">
+                <label for="idProduct">Produto</label>
+                <select name="idProduct" id="idProduct" class="form-control" required>
+                    <option value="">Selecione o produto</option>
+                    @foreach ($products as $product)
+                        <option value="{{ $product->idProduct }}">{{ $product->nameProduct }}</option>
+                    @endforeach
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="idProduct">Usuário</label>
+                <select name="idProduct" id="idProduct" class="form-control" required>
+                    <option value="">Selecione o usuário</option>
+                    @foreach ($users as $user)
+                        <option value="{{ $user->idUser }}">{{ $user->nameUser }}</option>
+                    @endforeach
+                </select>
+            </div>
+
+
             <div class="form-group">
                 <label for="describe">Descrição</label>
-                <input type="text" class="form-control" id="describe" name="describe" value="{{ old('describe') }}" required>
-                
+                <input type="text" name="describe" id="describe" class="form-control" required>
             </div>
 
-            <div class="form-group">
-                <label for="date">Data</label>
-                <input type="date" class="form-control" id="date" name="date" value="{{ old('requestDate') }}" required>
-            </div>
 
             <div class="form-group">
-                <label for="quantity">Quantidade:</label>
-                <input type="text" class="form-control" id="quantity" name="quantity" value="{{ old('quantity') }}" required>
-                
+                <label for="quantity">Quantidade</label>
+                <input type="number" name="quantity" id="quantity" class="form-control" required min="1">
             </div>
 
+
             <div class="form-group">
-                <button type="submit" class="btn btn-primary">Criar Pedido</button>
+                <label for="requestDate">Data do Pedido</label>
+                <input type="date" name="requestDate" id="requestDate" class="form-control" required>
             </div>
+
+
+            <button type="submit" class="btn btn-primary">Criar Pedido</button>
         </form>
     </div>
 @endsection

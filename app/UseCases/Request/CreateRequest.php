@@ -3,17 +3,28 @@
 namespace App\UseCases\Request;
 
 use App\Models\RequestModel;
+use Illuminate\Validation\ValidationException;
+use Illuminate\Support\Facades\Hash;
 
 class CreateRequest
 {
-    /**
-     * Handle the creation of a new request.
-     *
-     * @param array $validated
-     * @return RequestModel
-     */
-    public function execute(array $validated): RequestModel
+
+    public function execute(array $data)
     {
-        return RequestModel::create($validated);
+        $validated = validator($data, [
+            'idProduct' => 'required|integer|unique:request,idProduct',
+            'idUser' => 'required|integer|unique:request,idUser',
+            'describe' => 'required|string|max:255',
+            'requestDate' => 'required|date',
+            'quantity' => 'required|integer|min:1',
+        ])->validate();
+
+        return RequestModel::create([
+            'idProduct' => $validated['idProduct'],
+            'idUser' => $validated['idUser'],
+            'describe' => $validated['describe'],
+            'requestDate' => $validated['requestDate'],
+            'quantity' => $validated['quantity'],
+        ]);
     }
 }

@@ -12,8 +12,18 @@ class CreateSector
      * @param array $validated
      * @return Sector
      */
-    public function execute(array $validated): Sector
+    public function execute(array $data)
     {
-        return Sector::create($validated);
+        $validated = validator($data, [
+            'id' => 'required|integer|unique:sectors,id',
+            'name' => 'required|string|max:255',
+            'headSector' => 'required|string|max:255', 
+        ])->validate();
+
+        return Sector::create([
+            'id' => $validated['id'],
+            'name' => $validated['name'],
+            'headSector' => $validated['headSector'],
+        ]);
     }
 }

@@ -11,17 +11,28 @@ class RequestModel extends Model
 
     protected $table = 'request';
     protected $primaryKey = 'idRequest';
-    public $timestamps = false;
+    public $timestamps = true;
 
     protected $fillable = [
         'describe',
         'idUser',
+        'idProduct',
         'requestDate',
         'quantity',
     ];
 
-    public function supplier()
+    public function product()
     {
-        return $this->belongsTo(Supplier::class, 'idSupplier', 'idSupplier');
+        return $this->belongsTo(Product::class, 'idProduct');
     }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'idUser');
+    }
+
+    // public function supplier()
+    // {
+    //     return $this->belongsTo(Supplier::class, 'idSupplier', 'idSupplier');
+    // }
 }

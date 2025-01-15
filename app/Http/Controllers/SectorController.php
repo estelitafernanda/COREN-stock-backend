@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Sector; // Certifique-se de que o modelo Sector existe.
+use App\Models\Sector; 
 use Illuminate\Http\Request;
 use App\UseCases\Sector\CreateSector;
 use App\UseCases\Sector\UpdateSector;
@@ -15,8 +15,9 @@ class SectorController extends Controller
      */
     public function index()
     {
-        $dados = Sector::all();
-        return view('sector.index', compact('dados'));
+        $sector = Sector::all();
+        //return view('sectors.index', compact('dados'));
+        return $sector;
     }
 
     /**
@@ -24,7 +25,8 @@ class SectorController extends Controller
      */
     public function create()
     {
-        return view('sector.create');
+        $sector = Sector::all();
+        return view('sectors.create', compact('sector'));
     }
 
     /**
@@ -33,7 +35,7 @@ class SectorController extends Controller
     public function store(Request $request, CreateSector $createSector)
     {
         $validated = $request->validate([
-            'idSector' => 'required|integer',
+            'id' => 'required|integer|unique:sectors, id',
             'name' => 'required|string|max:255',
             'headSector' => 'required|string|max:255',
         ]);
@@ -49,7 +51,7 @@ class SectorController extends Controller
     public function show(string $id)
     {
         $sector = Sector::findOrFail($id);
-        return view('sector.show', compact('sector'));
+        return view('sectors.show', compact('sector'));
     }
 
     /**
@@ -58,7 +60,7 @@ class SectorController extends Controller
     public function edit(string $id)
     {
         $sector = Sector::findOrFail($id);
-        return view('sector.edit', compact('sector'));
+        return view('sectors.edit', compact('sector'));
     }
 
     /**
@@ -86,5 +88,17 @@ class SectorController extends Controller
         $deleteSector->execute($id);
 
         return redirect()->route('sectors.index')->with('success', 'Setor excluído com sucesso!');
+    }
+    public function listProducts($idSector){
+        $sector = Sector::findOrFail($idSector);
+        $products = $sector->listProducts();
+
+        return view('sectors.products', compact('sector', 'products'));
+    }
+    public function targetProducts($id){
+        $sector = Sector::findOrFail($id);
+        $products = $sector->targetProducts();
+
+        return view('sectors.target-products', compact('sector', 'products'));
     }
 }
