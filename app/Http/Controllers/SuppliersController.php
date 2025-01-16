@@ -1,0 +1,98 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use App\Models\Supplier; 
+use Illuminate\Http\Request;
+use App\UseCases\Suppliers\CreateSupplier;
+use App\UseCases\Suppliers\UpdateSupplier;
+use App\UseCases\Suppliers\DeleteSupplier;
+
+class SuppliersController extends Controller
+{
+    protected $createSupplier;
+    protected $deleteSupplier;
+    protected $updateSupplier;
+
+    public function __construct(CreateSupplier $createSupplier, DeleteSupplier $deleteSupplier, UpdateSupplier $updateSupplier)
+    {
+        $this->createSupplier = $createSupplier;
+        $this->deleteSupplier = $deleteSupplier;
+        $this->updateSupplier = $updateSupplier;
+    }
+
+    public function index()
+    {
+        $suppliers = Supplier::all();
+        return view('suppliers.index', compact('suppliers'));
+    }
+
+    /**
+     * Show the form for creating a new resource.
+     */
+    public function create()
+    {
+        $supplier = Supplier::all();
+        return view('suppliers.create', compact('supplier'));
+    }
+
+    /**
+     * Store a newly created resource in storage.
+     */
+    public function store(Request $request, CreateSupplier $createSupplier)
+    {
+        try {
+            $supplier = $this->createSupplier->execute($request->all());
+            return redirect()->route('suppliers.index')->with('success', 'Fornecedor criado com sucesso!');
+        } catch (\Exception $e) {
+            return back()->with('error', 'Erro ao criar o fornecedor: ' . $e->getMessage());
+        }
+    }
+
+    /**
+     * Display the specified resource.
+     */
+    public function show(string $id)
+    {
+        $supplier = Supplier::findOrFail($id);
+        return view('suppliers.show', compact('supplier'));
+    }
+
+    /**
+     * Show the form for editing the specified resource.
+     */
+    public function edit(string $id)
+    {
+        $supplier = Supplier::findOrFail($id);
+        return view('suppliers.edit', compact('supplier'));
+    }
+
+    /**
+     * Update the specified resource in storage.
+     */
+    public function update(Request $request, string $idSupplier, UpdateSupplier $updateSupplier)
+    {
+        try {
+            $supplier = Supplier::findOrFail($idSupplier);
+    
+            $this->updateSupplier->execute($idSupplier, $request->all());
+    
+            return redirect()->route('suppliers.index')->with('success', 'Fornecedor atualizado com sucesso!');
+        } catch (\Exception $e) {
+            return back()->with('error', 'Erro ao atualizar o Fornecedor: ' . $e->getMessage());
+        }
+    }
+
+    /**
+     * Remove the specified resource from storage.
+     */
+    public function destroy(string $id, DeleteSupplier $deleteSupplier)
+    {
+        try {
+            $this->deleteSupplier->execute($id);
+            return redirect()->route('suppliers.index')->with('success', 'Fornecedor excluído com sucesso!');
+        } catch (\Exception $e) {
+            return back()->with('error', 'Erro ao excluir o Fornecedor: ' . $e->getMessage());
+        }
+    }
+}
