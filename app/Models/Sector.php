@@ -11,7 +11,7 @@ class Sector extends Model
 
     protected $table = 'sectors';
     protected $primaryKey = 'id';
-    public $timestamps = true;
+    public $timestamps = false;
 
     protected $fillable = [
         'id',
@@ -27,7 +27,10 @@ class Sector extends Model
     public function listProducts(){
         return $this->products()->get();
     }
+    public function users(){
 
+        return $this->hasMany(User::class, 'idSector'); 
+    }
     public function targetProducts(){
         return $this->products()
             ->where('currentQuantity', '<', 'minQuantity') 

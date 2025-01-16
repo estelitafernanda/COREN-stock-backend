@@ -10,14 +10,22 @@ use App\UseCases\Sector\DeleteSector;
 
 class SectorController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
+    protected $createSector;
+    protected $deleteSector;
+    protected $updateSector;
+
+    public function __construct(CreateSector $createSector, DeleteSector $deleteSector, UpdateSector $updateSector)
+    {
+        $this->createSector = $createSector;
+        $this->deleteSector = $deleteSector;
+        $this->updateSector = $updateSector;
+    }
+
     public function index()
     {
-        $sector = Sector::all();
-        //return view('sectors.index', compact('dados'));
-        return $sector;
+        $sectors = Sector::all();
+        return view('sectors.index', compact('sectors'));
+        // return $sectors;
     }
 
     /**
@@ -34,15 +42,12 @@ class SectorController extends Controller
      */
     public function store(Request $request, CreateSector $createSector)
     {
-        $validated = $request->validate([
-            'id' => 'required|integer|unique:sectors, id',
-            'name' => 'required|string|max:255',
-            'headSector' => 'required|string|max:255',
-        ]);
-
-        $createSector->execute($validated);
-
-        return redirect()->route('sectors.index')->with('success', 'Setor criado com sucesso!');
+        try {
+            $sector = $this->createSector->execute($request->all());
+            return redirect()->route('sectors.index')->with('success', 'Setor criado com sucesso!');
+        } catch (\Exception $e) {
+            return back()->with('error', 'Erro ao criar o usuário: ' . $e->getMessage());
+        }
     }
 
     /**
@@ -68,16 +73,15 @@ class SectorController extends Controller
      */
     public function update(Request $request, string $id, UpdateSector $updateSector)
     {
-        $validated = $request->validate([
-            'name' => 'required|string|max:255',
-            'headSector' => 'required|string|max:255',
-        ]);
-
-        $sector = Sector::findOrFail($id);
-
-        $updateSector->execute($sector, $validated);
-
-        return redirect()->route('sectors.index')->with('success', 'Setor atualizado com sucesso!');
+        try {
+            $sector = Sector::findOrFail($id);
+    
+            $this->updateSector->execute($id, $request->all());
+    
+            return redirect()->route('sectors.index')->with('success', 'setor atualizado com sucesso!');
+        } catch (\Exception $e) {
+            return back()->with('error', 'Erro ao atualizar o setor: ' . $e->getMessage());
+        }
     }
 
     /**
@@ -85,9 +89,12 @@ class SectorController extends Controller
      */
     public function destroy(string $id, DeleteSector $deleteSector)
     {
-        $deleteSector->execute($id);
-
-        return redirect()->route('sectors.index')->with('success', 'Setor excluído com sucesso!');
+        try {
+            $this->deleteSector->execute($id);
+            return redirect()->route('sectors.index')->with('success', 'Setor excluído com sucesso!');
+        } catch (\Exception $e) {
+            return back()->with('error', 'Erro ao excluir o setor: ' . $e->getMessage());
+        }
     }
     public function listProducts($idSector){
         $sector = Sector::findOrFail($idSector);

@@ -22,11 +22,6 @@
             @csrf
 
             <div class="form-group">
-                <label for="idSupplier">ID do Fornecedor</label>
-                <input type="number" name="idSupplier" id="idSupplier" class="form-control" required>
-            </div>
-
-            <div class="form-group">
                 <label for="corporateReason">Razão Social</label>
                 <input type="text" name="corporateReason" id="corporateReason" class="form-control" required>
             </div>

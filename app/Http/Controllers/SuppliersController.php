@@ -10,13 +10,21 @@ use App\UseCases\Suppliers\DeleteSupplier;
 
 class SuppliersController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
+    protected $createSupplier;
+    protected $deleteSupplier;
+    protected $updateSupplier;
+
+    public function __construct(CreateSupplier $createSupplier, DeleteSupplier $deleteSupplier, UpdateSupplier $updateSupplier)
+    {
+        $this->createSupplier = $createSupplier;
+        $this->deleteSupplier = $deleteSupplier;
+        $this->updateSupplier = $updateSupplier;
+    }
+
     public function index()
     {
-        $supplier = Supplier::all();
-        return $supplier;
+        $suppliers = Supplier::all();
+        return view('suppliers.index', compact('suppliers'));
     }
 
     /**
@@ -33,17 +41,12 @@ class SuppliersController extends Controller
      */
     public function store(Request $request, CreateSupplier $createSupplier)
     {
-        $validated = $request->validate([
-            'idSupplier' => 'required|integer|unique:suppliers,idSupplier',
-            'corporateReason' => 'required|string|max:255',
-            'name' => 'required|string|max:255',
-            'address' => 'required|string|max:255',
-            'contact' => 'required|string|max:255',
-        ]);
-
-        $createSupplier->execute($validated);
-
-        return redirect()->route('supplier.index')->with('success', 'Fornecedor criado com sucesso!');
+        try {
+            $supplier = $this->createSupplier->execute($request->all());
+            return redirect()->route('suppliers.index')->with('success', 'Fornecedor criado com sucesso!');
+        } catch (\Exception $e) {
+            return back()->with('error', 'Erro ao criar o fornecedor: ' . $e->getMessage());
+        }
     }
 
     /**
@@ -52,7 +55,7 @@ class SuppliersController extends Controller
     public function show(string $id)
     {
         $supplier = Supplier::findOrFail($id);
-        return view('supplier.show', compact('supplier'));
+        return view('suppliers.show', compact('supplier'));
     }
 
     /**
@@ -61,26 +64,23 @@ class SuppliersController extends Controller
     public function edit(string $id)
     {
         $supplier = Supplier::findOrFail($id);
-        return view('supplier.edit', compact('supplier'));
+        return view('suppliers.edit', compact('supplier'));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id, UpdateSupplier $updateSupplier)
+    public function update(Request $request, string $idSupplier, UpdateSupplier $updateSupplier)
     {
-        $validated = $request->validate([
-            'corporateReason' => 'required|string|max:255',
-            'name' => 'required|string|max:255',
-            'address' => 'required|string|max:255',
-            'contact' => 'required|string|max:255',
-        ]);
-
-        $supplier = Supplier::findOrFail($id);
-
-        $updateSupplier->execute($supplier, $validated);
-
-        return redirect()->route('supplier.index')->with('success', 'Fornecedor atualizado com sucesso!');
+        try {
+            $supplier = Supplier::findOrFail($idSupplier);
+    
+            $this->updateSupplier->execute($idSupplier, $request->all());
+    
+            return redirect()->route('suppliers.index')->with('success', 'Fornecedor atualizado com sucesso!');
+        } catch (\Exception $e) {
+            return back()->with('error', 'Erro ao atualizar o Fornecedor: ' . $e->getMessage());
+        }
     }
 
     /**
@@ -88,8 +88,11 @@ class SuppliersController extends Controller
      */
     public function destroy(string $id, DeleteSupplier $deleteSupplier)
     {
-        $deleteSupplier->execute($id);
-
-        return redirect()->route('supplier.index')->with('success', 'Fornecedor excluído com sucesso!');
+        try {
+            $this->deleteSupplier->execute($id);
+            return redirect()->route('suppliers.index')->with('success', 'Fornecedor excluído com sucesso!');
+        } catch (\Exception $e) {
+            return back()->with('error', 'Erro ao excluir o Fornecedor: ' . $e->getMessage());
+        }
     }
 }

@@ -30,12 +30,13 @@ class CreateMovement
     private function validate(array $data)
     {
         $validator = \Validator::make($data, [
-            'idProduct' => 'required|integer|exists:products,id',
+            'idProduct' => 'required|integer|exists:products,idProduct',
             'quantity' => 'required|integer|min:1',
             'movementDate' => 'required|date',
-            'idResponsible' => 'required|integer|exists:users,id',
-            'idOriginSector' => 'nullable|integer|exists:sectors,id',
-            'idDestinationSector' => 'required|integer|exists:sectors,id',
+            'idUserRequest' => 'required|integer|exists:request,idUser',
+            'idUserResponse' => 'required|integer|exists:users, idUser',
+            'idOriginSector' => 'nullable|integer|exists:sectors,idSector',
+            'idDestinationSector' => 'required|integer|exists:sectors,idSector',
             'movementStatus' => 'required|string|max:255',
         ]);
 

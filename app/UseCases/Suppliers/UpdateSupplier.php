@@ -11,10 +11,25 @@ class UpdateSupplier
      *
      * @param Supplier $supplier
      * @param array $validated
-     * @return bool
      */
-    public function execute(Supplier $supplier, array $validated): bool
+    public function execute(string $idSupplier, array $data)
     {
-        return $supplier->update($validated);
+        $supplier = Supplier::findOrFail($idSupplier);
+
+        $validated = validator($data,[
+            'corporateReason' => 'required|string|max:255',
+            'name' => 'required|string|max:255',
+            'address' => 'required|string|max:255',
+            'contact' => 'required|string|max:255',
+        ])->validate();
+
+        $supplier->update([
+            'name' => $validated['name'],
+            'corporateReason' => $validated['corporateReason'],
+            'address' => $validated['address'],
+            'contact' => $validated['contact'],
+        ]);
+
+        return $supplier;
     }
 }

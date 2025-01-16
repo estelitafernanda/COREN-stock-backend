@@ -3,18 +3,21 @@
 namespace App\UseCases\Request;
 
 use App\Models\RequestModel;
-
 class DeleteRequest
 {
     /**
      * Handle the deletion of a request.
      *
      * @param string $id
-     * @return bool
      */
-    public function execute(string $id): bool
+    public function execute(string $id)
     {
-        $requestData = RequestModel::findOrFail($id);
-        return $requestData->delete();
+        $request = RequestModel::find($id);
+
+        if (!$request) {
+            throw new ModelNotFoundException("Pedido não encontrado.");
+        }
+
+        return $request->delete();
     }
 }

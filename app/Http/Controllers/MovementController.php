@@ -31,12 +31,13 @@ class MovementController extends Controller
     public function store(Request $request, CreateMovement $createMovement)
     {
         $validated = $request->validate([
-            'idProduct' => 'required|integer|exists:products,id',
+            'idProduct' => 'required|integer|exists:products,idProduct',
             'quantity' => 'required|integer|min:1',
             'movementDate' => 'required|date',
-            'idResponsible' => 'required|integer|exists:users,id',
-            'idOriginSector' => 'nullable|integer|exists:sectors,id',
-            'idDestinationSector' => 'required|integer|exists:sectors,id',
+            'idUserRequest' => 'required|integer|exists:request,idUser',
+            'idUserResponse' => 'required|integer|exists:users, idUser',
+            'idOriginSector' => 'nullable|integer|exists:sectors,idSector',
+            'idDestinationSector' => 'required|integer|exists:sectors,idSector',
             'movementStatus' => 'required|string|max:255',
         ]);
 
@@ -71,12 +72,13 @@ class MovementController extends Controller
         $movement = Movement::findOrFail($id);
 
         $validated = $request->validate([
-            'idProduct' => 'required|integer|exists:products,id',
+            'idProduct' => 'required|integer|exists:products,idProduct',
             'quantity' => 'required|integer|min:1',
             'movementDate' => 'required|date',
-            'idResponsible' => 'required|integer|exists:users,id',
-            'idOriginSector' => 'nullable|integer|exists:sectors,id',
-            'idDestinationSector' => 'required|integer|exists:sectors,id',
+            'idUserRequest' => 'required|integer|exists:request,idUser',
+            'idUserResponse' => 'required|integer|exists:users, idUser',
+            'idOriginSector' => 'nullable|integer|exists:sectors,idSector',
+            'idDestinationSector' => 'required|integer|exists:sectors,idSector',
             'movementStatus' => 'required|string|max:255',
         ]);
 

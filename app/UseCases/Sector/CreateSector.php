@@ -15,13 +15,11 @@ class CreateSector
     public function execute(array $data)
     {
         $validated = validator($data, [
-            'id' => 'required|integer|unique:sectors,id',
             'name' => 'required|string|max:255',
             'headSector' => 'required|string|max:255', 
         ])->validate();
 
         return Sector::create([
-            'id' => $validated['id'],
             'name' => $validated['name'],
             'headSector' => $validated['headSector'],
         ]);

@@ -12,9 +12,15 @@ class DeleteSupplier
      * @param string $id
      * @return bool
      */
-    public function execute(string $id): bool
+    public function execute(string $id)
     {
-        $supplier = Supplier::findOrFail($id);
+
+        $supplier = Supplier::find($id);
+
+        if (!$supplier) {
+            throw new ModelNotFoundException("Fornecedor não encontrado.");
+        }
+
         return $supplier->delete();
     }
 }

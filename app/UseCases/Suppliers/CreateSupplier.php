@@ -15,7 +15,6 @@ class CreateSupplier
     public function execute(array $data)
     {
         $validated = validator($data, [
-            'idSupplier' => 'required|integer|unique:suppliers,idSupplier',
             'corporateReason' => 'required|string|max:255',
             'name' => 'required|string|max:255',
             'address' => 'required|string|max:255',
@@ -24,7 +23,6 @@ class CreateSupplier
         ])->validate();
 
         return Supplier::create([
-            'id' => $validated['idSupplier'],
             'corporateReason' => $validated['corporateReason'],
             'name' => $validated['name'],
             'address' => $validated['address'],

@@ -19,6 +19,13 @@
                 <a href="{{ route('requests.show', $request->idRequest) }}">Ver</a>
                 <a href="{{ route('requests.edit', $request->idRequest) }}">Editar</a>
             </td>
+            <td>
+                <form action="{{ route('requests.destroy', $request->idRequest) }}" method="POST" style="display:inline;">
+                    @csrf
+                    @method('DELETE')
+                    <button type="submit" class="btn btn-danger">Excluir</button>
+                </form>
+            </td>
         </tr>
         @endforeach
     </tbody>

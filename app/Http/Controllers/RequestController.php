@@ -13,14 +13,17 @@ use App\Models\User;
 class RequestController extends Controller
 {
 
-     // Declare a variável para o CreateRequest
-     private $createRequest;
+    
+    private $createRequest;
+    private $updateRequest;
+    private $deleteRequest;
 
-     // Injeção de dependência no construtor
-     public function __construct(CreateRequest $createRequest)
+     
+    public function __construct(CreateRequest $createRequest, UpdateRequest $updateRequest, DeleteRequest $deleteRequest)
      {
-         // Atribuindo o serviço CreateRequest à propriedade
-         $this->createRequest = $createRequest;
+        $this->updateRequest = $updateRequest;
+        $this->deleteRequest = $deleteRequest;
+        $this->createRequest = $createRequest;
      }
  
 
@@ -71,8 +74,10 @@ class RequestController extends Controller
      */
     public function edit(string $id)
     {
+        $products = Product::all();
+        $users = User::all();
         $request = RequestModel::findOrFail($id);
-        return view('requests.edit', compact('request'));
+        return view('requests.edit', compact('request', 'products', 'users'));
     }
 
     /**
@@ -80,19 +85,15 @@ class RequestController extends Controller
      */
     public function update(Request $request, string $id, UpdateRequest $updateRequest)
     {
-        $requestData = RequestModel::findOrFail($id);
-
-        $validated = $request->validate([
-            'idRequest' => 'required|integer|unique:requests,idRequest,' . $id,
-            'idProduct' => 'required|integer|unique:requests,idProduct',
-            'describe' => 'required|string|max:255',
-            'requestDate' => 'required|date',
-            'quantity' => 'required|integer|min:1',
-        ]);
-
-        $updateRequest->execute($requestData, $validated);
-
-        return redirect()->route('requests.index')->with('success', 'Requisição atualizada com sucesso!');
+        try {
+            $requestion = RequestModel::findOrFail($id);
+    
+            $this->updateRequest->execute($id, $request->all());
+    
+            return redirect()->route('requests.index')->with('success', 'Pedido atualizado com sucesso!');
+        } catch (\Exception $e) {
+            return back()->with('error', 'Erro ao atualizar o pedido: ' . $e->getMessage());
+        }
     }
 
     /**
@@ -100,8 +101,11 @@ class RequestController extends Controller
      */
     public function destroy(string $id, DeleteRequest $deleteRequest)
     {
-        $deleteRequest->execute($id);
-
-        return redirect()->route('requests.index')->with('success', 'Requisição excluída com sucesso!');
+        try {
+            $this->deleteRequest->execute($id);
+            return redirect()->route('requests.index')->with('success', 'pedido excluído com sucesso!');
+        } catch (\Exception $e) {
+            return back()->with('error', 'Erro ao excluir o pedido: ' . $e->getMessage());
+        }
     }
 }

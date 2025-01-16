@@ -21,10 +21,7 @@
         <form action="{{ route('sectors.store') }}" method="POST">
             @csrf
 
-            <div class="form-group">
-                <label for="id">Id do Setor</label>
-                <input type="text" name="id" id="id" class="form-control" required>
-            </div>
+    
 
             <div class="form-group">
                 <label for="name">Nome</label>

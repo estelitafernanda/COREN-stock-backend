@@ -29,9 +29,9 @@ class ProductController extends Controller
     {
         $products = Product::all();
 
-        return $products;
+        // return $products;
     
-        // return view('product.index', compact('products'));
+        return view('product.index', compact('products'));
     }
 
     /**
@@ -82,20 +82,26 @@ class ProductController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
+    public function edit(string $idProduct)
     {
-        $product = Product::findOrFail($id);
+        $product = Product::findOrFail($idProduct);
         return view('product.edit', compact('product'));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request, string $idProduct)
     {
-        // Atualiza o produto utilizando o caso de uso UpdateProduct
-        $useCase = new UpdateProduct();
-        return $useCase->execute($request, $id);
+        try {
+            $product = Product::findOrFail($idProduct);
+    
+            $this->updateProduct->execute($idProduct, $request->all());
+    
+            return redirect()->route('products.index')->with('success', 'Usuário atualizado com sucesso!');
+        } catch (\Exception $e) {
+            return back()->with('error', 'Erro ao atualizar o usuário: ' . $e->getMessage());
+        }
     }
 
     /**

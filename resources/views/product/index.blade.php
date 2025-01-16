@@ -18,10 +18,17 @@
             <td>{{ $product->nameProduct }}</td>
             <td>{{ $product->describe }}</td>
             <td><img src="/images/products/{{ $product->image }}" alt=""></td>
-            <!-- <td>
+            <td>
                 <a href="{{ route('products.show', $product->code) }}">Ver</a>
                 <a href="{{ route('products.edit', $product->code) }}">Editar</a>
-            </td> -->
+            </td>
+            <td>
+                <form action="{{ route('products.destroy', $product->idProduct) }}" method="POST" style="display:inline;">
+                    @csrf
+                    @method('DELETE')
+                    <button type="submit" class="btn btn-danger">Excluir</button>
+                </form>
+            </td>
         </tr>
         @endforeach
     </tbody>

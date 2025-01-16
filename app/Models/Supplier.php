@@ -11,7 +11,7 @@ class Supplier extends Model
 
     protected $table = 'suppliers';
     protected $primaryKey = 'idSupplier';
-    public $timestamps = true;
+    public $timestamps = false;
 
     protected $fillable = [
         'idSupplier',

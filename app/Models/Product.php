@@ -11,7 +11,7 @@ class Product extends Model
 
     protected $table = 'products';
     protected $primaryKey = 'idProduct';
-    public $timestamps = true;
+    public $timestamps = false;
 
     protected $fillable = [
         'idProduct',

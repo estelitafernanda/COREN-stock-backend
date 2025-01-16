@@ -10,11 +10,17 @@ class DeleteSector
      * Handle the deletion of a sector.
      *
      * @param string $id
-     * @return bool
      */
-    public function execute(string $id): bool
+    public function execute(string $id)
     {
-        $sector = Sector::findOrFail($id);
+        // Encontrar o usuário ou lançar exceção caso não exista
+        $sector = Sector::find($id);
+
+        if (!$sector) {
+            throw new ModelNotFoundException("Setor não encontrado.");
+        }
+
+        // Exclui o usuário
         return $sector->delete();
     }
 }

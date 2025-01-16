@@ -11,10 +11,21 @@ class UpdateSector
      *
      * @param Sector $sector
      * @param array $validated
-     * @return bool
      */
-    public function execute(Sector $sector, array $validated): bool
+    public function execute(string $id, array $data)
     {
-        return $sector->update($validated);
+        $sector = Sector::findOrFail($id);
+
+        $validated = validator($data, [
+            'name' => 'required|string|max:255',
+            'headSector' => 'required|string|max:255',
+        ])->validate();
+
+        $sector->update([
+            'name' => $validated['name'],
+            'headSector' => $validated['headSector'],
+        ]);
+
+        return $sector;
     }
 }

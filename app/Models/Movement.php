@@ -17,7 +17,8 @@ class Movement extends Model
         'idProduct',
         'quantity',
         'movementDate',
-        'idResponsible',
+        'idUserRequest',
+        'idUserResponse', 
         'idOriginSector',
         'idDestinationSector',
         'movementStatus',
@@ -41,5 +42,17 @@ class Movement extends Model
     public function destinationSector()
     {
         return $this->belongsTo(Sector::class, 'idDestinationSector', 'idSector');
+    }
+    public function atualizarStatusMovimento($status)
+    {
+        if ($status === 'aceito') {
+            $this->movementStatus = 'aceito';
+        } elseif ($statusPedido === 'negado') {
+            $this->movementStatus = 'negado';
+        } elseif ($status === 'em espera') {
+            $this->movementStatus = 'em espera';
+        }
+
+        $this->save();
     }
 }

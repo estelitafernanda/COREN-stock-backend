@@ -11,17 +11,23 @@ class User extends Authenticatable
 
     protected $table = 'users';
     protected $primaryKey = 'idUser';
-    public $timestamps = true;
+    public $timestamps = false;
 
     protected $fillable = [
         'nameUser',
+        'idSector',
         'email',
         'role',
         'password',
+
     ];
 
     public function movements()
     {
-        return $this->hasMany(Movement::class, 'idResponsible', 'idUser');
+        return $this->hasMany(Movement::class, 'idUserRequest', 'idUser');
+    }
+    public function sector()
+    {
+        return $this->belongsTo(Sector::class, 'idSector'); 
     }
 }

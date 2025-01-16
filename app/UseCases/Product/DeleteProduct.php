@@ -4,6 +4,7 @@ namespace App\UseCases\Product;
 
 use App\Models\Product;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 class DeleteProduct
 {
@@ -13,12 +14,14 @@ class DeleteProduct
      * @param string $id
      * @return RedirectResponse
      */
-    public function execute(string $id): RedirectResponse
+    public function execute(string $id)
     {
-        $product = Product::findOrFail($id);
+        $product = Product::find($id);
 
-        $product->delete();
-        
-        return redirect()->route('product.index')->with('success', 'Produto excluído com sucesso!');
+        if (!$product) {
+            throw new ModelNotFoundException("Usuário não encontrado.");
+        }
+
+        return $product->delete();
     }
 }
