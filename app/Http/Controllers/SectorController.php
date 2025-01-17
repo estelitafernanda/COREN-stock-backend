@@ -24,8 +24,8 @@ class SectorController extends Controller
     public function index()
     {
         $sectors = Sector::all();
-        return view('sectors.index', compact('sectors'));
-        // return $sectors;
+        // return view('sectors.index', compact('sectors'));
+        return $sectors;
     }
 
     /**
@@ -53,18 +53,18 @@ class SectorController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show(string $idSector)
     {
-        $sector = Sector::findOrFail($id);
+        $sector = Sector::findOrFail($idSector);
         return view('sectors.show', compact('sector'));
     }
 
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
+    public function edit(string $idSector)
     {
-        $sector = Sector::findOrFail($id);
+        $sector = Sector::findOrFail($idSector);
         return view('sectors.edit', compact('sector'));
     }
 

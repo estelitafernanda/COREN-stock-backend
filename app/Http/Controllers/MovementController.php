@@ -14,7 +14,7 @@ class MovementController extends Controller
     public function index()
     {
         $dados = Movement::all();
-        return view('movement.index', compact('dados'));
+        return view('movements.index', compact('dados'));
     }
 
     /**
@@ -22,7 +22,7 @@ class MovementController extends Controller
      */
     public function create()
     {
-        return view('movement.create');
+        return view('movements.create');
     }
 
     /**
@@ -43,7 +43,7 @@ class MovementController extends Controller
 
         $createMovement->execute($validated);
 
-        return redirect()->route('movement.index')->with('success', 'Movimentação criada com sucesso!');
+        return redirect()->route('movements.index')->with('success', 'Movimentação criada com sucesso!');
     }
 
     /**
@@ -52,7 +52,7 @@ class MovementController extends Controller
     public function show(string $id)
     {
         $movement = Movement::findOrFail($id);
-        return view('movement.show', compact('movement'));
+        return view('movements.show', compact('movement'));
     }
 
     /**
@@ -61,7 +61,7 @@ class MovementController extends Controller
     public function edit(string $id)
     {
         $movement = Movement::findOrFail($id);
-        return view('movement.edit', compact('movement'));
+        return view('movements.edit', compact('movement'));
     }
 
     /**
@@ -84,7 +84,7 @@ class MovementController extends Controller
 
         $updateMovement->execute($movement, $validated);
 
-        return redirect()->route('movement.index')->with('success', 'Movimentação atualizada com sucesso!');
+        return redirect()->route('movements.index')->with('success', 'Movimentação atualizada com sucesso!');
     }
 
     /**
@@ -94,6 +94,6 @@ class MovementController extends Controller
     {
         $deleteMovement->execute($id);
 
-        return redirect()->route('movement.index')->with('success', 'Movimentação excluída com sucesso!');
+        return redirect()->route('movements.index')->with('success', 'Movimentação excluída com sucesso!');
     }
 }

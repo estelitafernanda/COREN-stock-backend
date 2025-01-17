@@ -10,11 +10,11 @@ class Sector extends Model
     use HasFactory;
 
     protected $table = 'sectors';
-    protected $primaryKey = 'id';
+    protected $primaryKey = 'idSector';
     public $timestamps = false;
 
     protected $fillable = [
-        'id',
+        'idSector',
         'name',
         'headSector',
     ];

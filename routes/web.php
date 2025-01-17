@@ -53,11 +53,8 @@ Route::delete('/suppliers/{idSupplier}/delete', [SuppliersController::class, 'de
 Route::put('/suppliers/{idSupplier}/update', [SuppliersController::class, 'update'])->name('suppliers.update');
 Route::get('/suppliers', [SuppliersController::class, 'index'])->name('suppliers.index');
 
-/*Route::get('/product/create', [ProductController::class, 'create']->name('product.create'));
-Route::post('/product', [ProductController::class, 'store'])->name('product.store');
+Route::post('/movements', [MovementController::class, 'store'])->name('movements.store');
+Route::get('/movements/create', [MovementController::class, 'create'])->name('movements.create');
+Route::get('/movements', [MovementController::class, 'index'])->name('movements.index');
 
-Route::get('/movement/create', [MovementController::class, 'create']->name('movement.create'));
-Route::post('/movement', [MovementController::class, 'store'])->name('movement.store');
-
-*/
 

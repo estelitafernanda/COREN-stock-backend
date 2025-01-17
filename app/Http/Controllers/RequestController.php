@@ -33,7 +33,8 @@ class RequestController extends Controller
     public function index()
     {
         $dados = RequestModel::all();
-        return view('requests.index', compact('dados'));
+        return $dados;
+        // return view('requests.index', compact('dados'));
     }
 
     /**

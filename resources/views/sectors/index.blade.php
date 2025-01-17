@@ -12,13 +12,13 @@
     <tbody>
         @foreach($sectors as $sector)
         <tr>
-            <td>{{ $sector->id}}</td>
+            <td>{{ $sector->idSector}}</td>
             <td>{{ $sector->name }}</td>
             <td>{{ $sector->headSector }}</td>
             <td>
-                <a href="{{ route('requests.show', $sector->id) }}">Ver</a>
-                <a href="{{ route('requests.edit', $sector->id) }}">Editar</a>
-                <form action="{{ route('sectors.destroy', $sector->id) }}" method="POST" style="display:inline;">
+                <a href="{{ route('sectors.show', $sector->idSector) }}">Ver</a>
+                <a href="{{ route('sectors.edit', $sector->idSector) }}">Editar</a>
+                <form action="{{ route('sectors.destroy', $sector->idSector) }}" method="POST" style="display:inline;">
                     @csrf
                     @method('DELETE')
                     <button type="submit" class="btn btn-danger">Excluir</button>
