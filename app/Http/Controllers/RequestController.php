@@ -32,9 +32,22 @@ class RequestController extends Controller
      */
     public function index()
     {
-        $dados = RequestModel::all();
-        return $dados;
-        // return view('requests.index', compact('dados'));
+        $requests = RequestModel::with(['product', 'user'])->get();
+
+        $requests = $requests->map(function($request) {
+            $request->product_name = $request->product ? $request->product->nameProduct : 'Produto não encontrado';
+            $request->user_name = $request->user ? $request->user->nameUser : 'Usuário não encontrado';
+            $request->sector_name = ($request->user && $request->user->sector) ? $request->user->sector->name : 'Setor não encontrado';
+    
+            unset($request->idProduct);
+            unset($request->idUser);
+            unset($request->product);
+            unset($request->user);
+    
+            return $request;
+        });
+    
+        return response()->json($requests);
     }
 
     /**
@@ -58,7 +71,22 @@ class RequestController extends Controller
         } catch (\Exception $e) {
             return back()->with('error', 'Erro ao criar o pedido: ' . $e->getMessage());
         }
-        
+
+        $validatedData = $request->validate([
+            'describe' => 'required|string',
+            'idUser' => 'required|exists:users,idUser',
+            'idProduct' => 'required|exists:products,idProduct',
+            'requestDate' => 'required|date',
+            'quantity' => 'required|integer|min:1',
+        ]);
+    
+        $newRequest = RequestModel::create($validatedData);
+        $newRequest->criarMovimento();
+    
+        return response()->json([
+            'message' => 'Pedido criado com sucesso e movimentação registrada.',
+            'request' => $newRequest,
+        ], 201);
     }
 
     /**

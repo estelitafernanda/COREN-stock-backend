@@ -21,6 +21,7 @@ class Movement extends Model
         'idUserResponse', 
         'idOriginSector',
         'idDestinationSector',
+        'idRequest',
         'movementStatus',
     ];
 
@@ -28,7 +29,7 @@ class Movement extends Model
     {
         return $this->belongsTo(Product::class, 'idProduct', 'idProduct');
     }
-
+    
     public function responsible()
     {
         return $this->belongsTo(User::class, 'idResponsible', 'idUser');

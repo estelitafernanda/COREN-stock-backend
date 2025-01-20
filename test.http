@@ -1,2 +1,11 @@
-GET http://127.0.0.1:8000/api/show
+POST http://127.0.0.1:8000/api/addSupplier
+
+{
+    "name": "Fornecedor X",
+    "telephone": "123456789",
+    "email": "fornecedorx@empresa.com",
+    "responsible": "Responsável X",
+    "cnpj": "12.345.678/0001-00",
+    "product_ids": [1, 2, 3]
+}
 

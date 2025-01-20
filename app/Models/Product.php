@@ -11,7 +11,7 @@ class Product extends Model
 
     protected $table = 'products';
     protected $primaryKey = 'idProduct';
-    public $timestamps = false;
+    public $timestamps = true;
 
     protected $fillable = [
         'idProduct',
@@ -42,5 +42,10 @@ class Product extends Model
     public function movements()
     {
         return $this->hasMany(Movement::class, 'idProduct', 'code');
+    }
+
+    public function suppliers()
+    {
+        return $this->belongsToMany(Supplier::class, 'supplier_product', 'product_id', 'supplier_id');
     }
 }

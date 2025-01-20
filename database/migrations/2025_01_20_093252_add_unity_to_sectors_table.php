@@ -11,10 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('users', function (Blueprint $table) {
-            if (!Schema::hasColumn('users', 'idSector')) {
-                $table->unsignedBigInteger('idSector');
-            }
+        Schema::table('sectors', function (Blueprint $table) {
+            $table->string('unity')->nullable()->after('name');
         });
     }
 
@@ -23,8 +21,8 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('users', function (Blueprint $table) {
-            $table->dropColumn('idSector');
+        Schema::table('sectors', function (Blueprint $table) {
+            $table->string('unity')->nullable()->after('name');
         });
     }
 };

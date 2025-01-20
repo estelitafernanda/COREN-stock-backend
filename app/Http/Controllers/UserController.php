@@ -25,8 +25,18 @@ class UserController extends Controller
      */
     public function index()
     {
-        return $dados = User::all();
-        // return view('users.index', compact('dados'));
+        $requests = User::with(['sector'])->get();
+
+        $requests = $requests->map(function($request) {
+            $request->sector_name = $request->sector ? $request->sector->name : 'Produto não encontrado';
+            
+            unset($request->idSector);
+            unset($request->sector);
+    
+            return $request;
+        });
+    
+        return response()->json($requests);
     }
 
     /**

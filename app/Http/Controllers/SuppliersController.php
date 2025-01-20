@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Supplier; 
+use App\Models\Product;
 use Illuminate\Http\Request;
 use App\UseCases\Suppliers\CreateSupplier;
 use App\UseCases\Suppliers\UpdateSupplier;
@@ -23,8 +24,8 @@ class SuppliersController extends Controller
 
     public function index()
     {
-        $suppliers = Supplier::all();
-        return view('suppliers.index', compact('suppliers'));
+        $suppliers = Supplier::with('products')->get();
+        return response()->json($suppliers);
     }
 
     /**
@@ -32,8 +33,8 @@ class SuppliersController extends Controller
      */
     public function create()
     {
-        $supplier = Supplier::all();
-        return view('suppliers.create', compact('supplier'));
+        $products = Product::all();
+        return view('suppliers.create', compact('products'));
     }
 
     /**
@@ -41,12 +42,9 @@ class SuppliersController extends Controller
      */
     public function store(Request $request, CreateSupplier $createSupplier)
     {
-        try {
-            $supplier = $this->createSupplier->execute($request->all());
-            return redirect()->route('suppliers.index')->with('success', 'Fornecedor criado com sucesso!');
-        } catch (\Exception $e) {
-            return back()->with('error', 'Erro ao criar o fornecedor: ' . $e->getMessage());
-        }
+        $supplier = $this->createSupplier->execute($request);
+
+        return redirect()->route('suppliers.index')->with('success', 'Fornecedor criado com sucesso!');
     }
 
     /**

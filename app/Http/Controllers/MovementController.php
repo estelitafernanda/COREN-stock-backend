@@ -34,6 +34,7 @@ class MovementController extends Controller
             'idProduct' => 'required|integer|exists:products,idProduct',
             'quantity' => 'required|integer|min:1',
             'movementDate' => 'required|date',
+            'idRequest' => 'required|integer|exists:request, idRequest',
             'idUserRequest' => 'required|integer|exists:request,idUser',
             'idUserResponse' => 'required|integer|exists:users, idUser',
             'idOriginSector' => 'nullable|integer|exists:sectors,idSector',
@@ -74,6 +75,7 @@ class MovementController extends Controller
         $validated = $request->validate([
             'idProduct' => 'required|integer|exists:products,idProduct',
             'quantity' => 'required|integer|min:1',
+            'idRequest' => 'required|integer|exists:request, idRequest',
             'movementDate' => 'required|date',
             'idUserRequest' => 'required|integer|exists:request,idUser',
             'idUserResponse' => 'required|integer|exists:users, idUser',

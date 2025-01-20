@@ -109,7 +109,11 @@ class ProductController extends Controller
      */
     public function destroy(string $id)
     {
-        $useCase = new DeleteProduct();
-        return $useCase->execute($id);
+        try {
+            $this->deleteProduct->execute($id);
+            return redirect()->route('products.index')->with('success', 'Produto excluído com sucesso!');
+        } catch (\Exception $e) {
+            return back()->with('error', 'Erro ao excluir o Produto: ' . $e->getMessage());
+        }
     }
 }

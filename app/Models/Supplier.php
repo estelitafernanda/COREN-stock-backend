@@ -11,18 +11,25 @@ class Supplier extends Model
 
     protected $table = 'suppliers';
     protected $primaryKey = 'idSupplier';
-    public $timestamps = false;
+    public $timestamps = true;
 
     protected $fillable = [
-        'idSupplier',
         'corporateReason',
         'name',
         'address',
         'contact',
+        'telephone',
+        'email',
+        'responsible',
+        'cnpj',
     ];
 
     public function requests()
     {
         return $this->hasMany(Request::class, 'idSupplier', 'idSupplier');
+    }
+    public function products()
+    {
+        return $this->belongsToMany(Product::class, 'supplier_product', 'supplier_id', 'product_id');
     }
 }

@@ -11,7 +11,7 @@ class RequestModel extends Model
 
     protected $table = 'request';
     protected $primaryKey = 'idRequest';
-    public $timestamps = false;
+    public $timestamps = true;
 
     protected $fillable = [
         'describe',
@@ -33,30 +33,23 @@ class RequestModel extends Model
         return $this->belongsTo(User::class, 'idUser');
     }
 
-    // public function supplier()
-    // {
-    //     return $this->belongsTo(Supplier::class, 'idSupplier', 'idSupplier');
-    // }
-
-    public function calcularEstoque(){
-        
-        if($this->status === "aceito"){
-            $product = $this->product;
-
-            if($product){
-                return $product->currentQuantity - $this->quantity; 
-            }
-        }
-        return null; 
-    }
     public function movement()
     {
         return $this->hasOne(Movement::class, 'idRequest');
     }
 
-    public function criarMovimento(){
+    public static function boot()
+    {
+        parent::boot();
+        static::created(function ($request) {
+            $request->criarMovimento();
+        });
+    }
+
+    public function criarMovimento()
+    {
         if ($this->movement) {
-            return; 
+            return;
         }
 
         $movement = new Movement();
@@ -64,9 +57,9 @@ class RequestModel extends Model
         $movement->quantity = $this->quantity;
         $movement->movementDate = now();
         $movement->idUserRequest = $this->idUser;
-        $movement->idUserResponse = $this->
-        $movement->idDestinationSector = $this->user->id; 
-        $movement->movementStatus = 'em espera'; 
+        $movement->idDestinationSector = $this->user->idUser;
+        $movement->movementStatus = 'em espera';
+        $movement->idRequest = $this->idRequest;
         $movement->save();
     }
 }
