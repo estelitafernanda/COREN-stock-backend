@@ -32,22 +32,26 @@ class RequestController extends Controller
      */
     public function index()
     {
-        $requests = RequestModel::with(['product', 'user'])->get();
+        $maxQnt = 4;
 
-        $requests = $requests->map(function($request) {
+        $requests = RequestModel::with(['product', 'user'])->paginate($maxQnt);
+
+        $requests->getCollection()->transform(function($request) {
             $request->product_name = $request->product ? $request->product->nameProduct : 'Produto não encontrado';
             $request->user_name = $request->user ? $request->user->nameUser : 'Usuário não encontrado';
             $request->sector_name = ($request->user && $request->user->sector) ? $request->user->sector->name : 'Setor não encontrado';
-    
+
             unset($request->idProduct);
             unset($request->idUser);
             unset($request->product);
             unset($request->user);
-    
+
             return $request;
         });
-    
+
         return response()->json($requests);
+            // $dados = RequestModel::all();
+            // return view('requests.index', compact('dados'));
     }
 
     /**

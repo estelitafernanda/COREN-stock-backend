@@ -19,20 +19,9 @@
                 <td>{{ $movement->idMovement }}</td>
                 <td>{{ $movement->idUserRequest }}</td>
                 <td>{{ ucfirst($movement->movementStatus) }}</td>
-                <td>{{ $movement->created_at->format('d/m/Y H:i') }}</td>
+                <td>{{ $movement->created_at }}</td>
                 <td>
-                    {{-- Botão para visualizar --}}
-                    <a href="{{ route('movements.show', $movement->idMovement) }}" class="btn btn-info btn-sm">Ver</a>
 
-                    {{-- Botão para editar --}}
-                    <a href="{{ route('movements.edit', $movement->idMovement) }}" class="btn btn-warning btn-sm">Editar</a>
-
-                    {{-- Formulário para exclusão --}}
-                    <form action="{{ route('movements.destroy', $movement->idMovement) }}" method="POST" style="display:inline;">
-                        @csrf
-                        @method('DELETE')
-                        <button type="submit" class="btn btn-danger btn-sm">Excluir</button>
-                    </form>
                 </td>
             </tr>
             @endforeach

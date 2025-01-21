@@ -17,10 +17,10 @@ Route::get('/user', function (Request $request) {
 Route::get('users', [UserController::class, 'index']);
 
 Route::get('show', [ProductController::class, 'index']);
-
 Route::get('showDepartments', [SectorController::class, 'index']);
-
 Route::get('showRequests', [RequestController::class, 'index']);
+Route::get('showMovement', [MovementController::class, 'index']);
+Route::get('showUser', [UserController::class, 'index']); 
 Route::get('showSuppliers', [SuppliersController::class, 'index']);
 
 

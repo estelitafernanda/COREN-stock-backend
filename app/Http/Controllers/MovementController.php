@@ -13,8 +13,35 @@ class MovementController extends Controller
      */
     public function index()
     {
-        $dados = Movement::all();
-        return view('movements.index', compact('dados'));
+        $requests = Movement::with(['product', 'userRequest', 'request'])->get();
+
+        $requests = $requests->map(function($request) {
+            // estrutura json de movimento ᕙ(`▿´)ᕗ
+            $result = [
+                // movement (tudo)
+                'idMovement' => $request->idMovement,
+                'quantity' => $request->quantity,
+                'movementDate' => $request->movementDate,
+                'movementStatus' => $request->movementStatus,
+                'idUserResponse' => $request->idUserResponse,
+                'idRequest' => $request->idRequest,
+                
+                // produto
+                'product_name' => $request->product ? $request->product->nameProduct : 'Produto não encontrado',
+                'currentQuantity' => $request->product ? $request->product->currentQuantity : 'Quantidade não encontrada',
+    
+                // usuário
+                'user_name_request' => $request->userRequest ? $request->userRequest->nameUser : 'Usuário não encontrado',
+                'user_sector' => $request->userRequest && $request->userRequest->idSector ? $request->userRequest->idSector : 'Setor não encontrado',
+    
+                // requisição
+                'request_describe' => $request->request ? $request->request->describe : 'Descrição não encontrada',
+            ];
+    
+            return $result;
+        });
+    
+        return response()->json($requests);
     }
 
     /**

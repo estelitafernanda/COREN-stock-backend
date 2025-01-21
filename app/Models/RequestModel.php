@@ -41,25 +41,28 @@ class RequestModel extends Model
     public static function boot()
     {
         parent::boot();
-        static::created(function ($request) {
-            $request->criarMovimento();
+        static::updated(function ($request) {
+            if ($request->getOriginal('status') !== 'aceito' && $request->status === 'aceito') {
+                $request->criarMovimento();
+            }
         });
     }
 
     public function criarMovimento()
     {
-        if ($this->movement) {
+        if ($this->movement()->exists()) {
             return;
         }
-
         $movement = new Movement();
         $movement->idProduct = $this->idProduct;
         $movement->quantity = $this->quantity;
-        $movement->movementDate = now();
+        $movement->movementDate = now(); 
         $movement->idUserRequest = $this->idUser;
-        $movement->idDestinationSector = $this->user->idUser;
+        $movement->idOriginSector = $this->user->sector->idSector;
+        $movement->idDestinationSector = $this->user->sector->idSector; 
         $movement->movementStatus = 'em espera';
         $movement->idRequest = $this->idRequest;
         $movement->save();
-    }
+    }   
+
 }
