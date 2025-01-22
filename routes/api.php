@@ -23,6 +23,8 @@ Route::get('showMovement', [MovementController::class, 'index']);
 Route::get('showUser', [UserController::class, 'index']); 
 Route::get('showSuppliers', [SuppliersController::class, 'index']);
 
+Route::get('sectors/{idSector}', [SectorController::class,'show'])->name('sectors.show');
+Route::get('suppliers/{idSupplier}', [SuppliersController::class,'show'])->name('suppliers.show');
 
 Route::post('addRequest', [RequestController::class, 'store']);
 Route::post('addProduct', [ProductController::class, 'store']);

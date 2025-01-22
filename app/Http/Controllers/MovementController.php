@@ -70,6 +70,7 @@ class MovementController extends Controller
         ]);
 
         $createMovement->execute($validated);
+        
 
         return redirect()->route('movements.index')->with('success', 'Movimentação criada com sucesso!');
     }

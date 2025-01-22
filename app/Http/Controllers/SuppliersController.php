@@ -52,8 +52,9 @@ class SuppliersController extends Controller
      */
     public function show(string $id)
     {
-        $supplier = Supplier::findOrFail($id);
-        return view('suppliers.show', compact('supplier'));
+        $supplier = Supplier::with('products')->findOrFail($id);
+
+        return response()->json($supplier);
     }
 
     /**

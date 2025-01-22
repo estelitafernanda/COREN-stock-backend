@@ -70,7 +70,7 @@ class RequestController extends Controller
     public function store(Request $request)
     {
         try {
-            $resquestion = $this->createRequest->execute($request->all());
+            $this->createRequest->execute($request->all());
             return redirect()->route('requests.index')->with('success', 'Pedido criado com sucesso!');
         } catch (\Exception $e) {
             return back()->with('error', 'Erro ao criar o pedido: ' . $e->getMessage());
@@ -91,6 +91,7 @@ class RequestController extends Controller
             'message' => 'Pedido criado com sucesso e movimentação registrada.',
             'request' => $newRequest,
         ], 201);
+
     }
 
     /**

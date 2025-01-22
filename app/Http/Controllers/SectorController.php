@@ -55,8 +55,26 @@ class SectorController extends Controller
      */
     public function show(string $idSector)
     {
-        $sector = Sector::findOrFail($idSector);
-        return view('sectors.show', compact('sector'));
+        try {
+            $sector = Sector::with(['users:idUser,idSector,nameUser,role'])->findOrFail($idSector);
+
+            $formattedUsers = $sector->users->map(function ($user) {
+                return [
+                    'nameUser' => $user->nameUser,
+                    'role' => $user->role
+                ];
+            });
+
+            return response()->json([
+                'idSector' => $sector->idSector,
+                'name' => $sector->name,
+                'headSector' => $sector->headSector,
+                'unity' => $sector->unity,
+                'users' => $formattedUsers
+            ]);
+        } catch (\Exception $e) {
+            return response()->json(['error' => 'Setor não encontrado: ' . $e->getMessage()], 404);
+        }
     }
 
     /**

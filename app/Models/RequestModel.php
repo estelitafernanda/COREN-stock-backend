@@ -41,7 +41,7 @@ class RequestModel extends Model
     public static function boot()
     {
         parent::boot();
-        static::updated(function ($request) {
+        static::created(function ($request) {
             if ($request->getOriginal('status') !== 'aceito' && $request->status === 'aceito') {
                 $request->criarMovimento();
             }
@@ -51,6 +51,7 @@ class RequestModel extends Model
     public function criarMovimento()
     {
         if ($this->movement()->exists()) {
+            Log::warning("Movimento já existe para a request ID: " . $this->idRequest);
             return;
         }
         $movement = new Movement();
@@ -63,6 +64,8 @@ class RequestModel extends Model
         $movement->movementStatus = 'em espera';
         $movement->idRequest = $this->idRequest;
         $movement->save();
+
+        Log::info("Salvando movimento para a request ID: " . $this->idRequest);
     }   
 
 }
