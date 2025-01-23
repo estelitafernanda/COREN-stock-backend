@@ -24,7 +24,7 @@ class SuppliersController extends Controller
 
     public function index()
     {
-        $suppliers = Supplier::with('products')->get();
+        $suppliers = Supplier::with('products')->paginate(4);
         return response()->json($suppliers);
     }
 

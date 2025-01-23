@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Movement;
+use App\Models\RequestModel;
 use App\UseCases\Movement\DeleteMovement;
 
 class MovementController extends Controller
@@ -13,7 +14,7 @@ class MovementController extends Controller
      */
     public function index()
     {
-        $requests = Movement::with(['product', 'userRequest', 'request'])->get();
+        $requests = Movement::with(['product', 'userRequest', 'request'])->paginate(4);
 
         $requests = $requests->map(function($request) {
             // estrutura json de movimento ᕙ(`▿´)ᕗ
@@ -49,7 +50,8 @@ class MovementController extends Controller
      */
     public function create()
     {
-        return view('movements.create');
+        $requests = RequestModel::all();
+        return view('movements.create', compact('requests'));
     }
 
     /**
@@ -70,7 +72,6 @@ class MovementController extends Controller
         ]);
 
         $createMovement->execute($validated);
-        
 
         return redirect()->route('movements.index')->with('success', 'Movimentação criada com sucesso!');
     }
@@ -78,27 +79,28 @@ class MovementController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show(string $idMovement)
     {
-        $movement = Movement::findOrFail($id);
-        return view('movements.show', compact('movement'));
+        $movement = Movement::findOrFail($idMovement);
+        return $movement;
+        //return view('movements.show', compact('movement'));
     }
 
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
+    public function edit(string $idMovement)
     {
-        $movement = Movement::findOrFail($id);
-        return view('movements.edit', compact('movement'));
+        $movements = Movement::findOrFail($idMovement);
+        return view('movements.edit', compact('movements'));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id, UpdateMovement $updateMovement)
+    public function update(Request $request, string $idMovement, UpdateMovement $updateMovement)
     {
-        $movement = Movement::findOrFail($id);
+        $movement = Movement::findOrFail($idMovement);
 
         $validated = $request->validate([
             'idProduct' => 'required|integer|exists:products,idProduct',
@@ -120,9 +122,9 @@ class MovementController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id, DeleteMovement $deleteMovement)
+    public function destroy(string $idMovement, DeleteMovement $deleteMovement)
     {
-        $deleteMovement->execute($id);
+        $deleteMovement->execute($idMovement);
 
         return redirect()->route('movements.index')->with('success', 'Movimentação excluída com sucesso!');
     }

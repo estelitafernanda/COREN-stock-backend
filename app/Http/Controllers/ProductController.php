@@ -27,7 +27,7 @@ class ProductController extends Controller
      */
     public function index()
     {
-        $products = Product::all();
+        $products = Product::paginate(7);
 
         return $products;
     
@@ -73,10 +73,13 @@ class ProductController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show(string $idProduct)
     {
-        $product = Product::findOrFail($id);
-        return view('product.show', compact('product'));
+        
+        $product = Product::findOrFail($idProduct);
+        return $product;
+        // return view('product.show', compact('product'));
+
     }
 
     /**
@@ -107,10 +110,10 @@ class ProductController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(string $idProduct)
     {
         try {
-            $this->deleteProduct->execute($id);
+            $this->deleteProduct->execute($idProduct);
             return redirect()->route('products.index')->with('success', 'Produto excluído com sucesso!');
         } catch (\Exception $e) {
             return back()->with('error', 'Erro ao excluir o Produto: ' . $e->getMessage());

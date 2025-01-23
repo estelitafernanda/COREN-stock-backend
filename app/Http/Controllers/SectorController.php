@@ -23,7 +23,7 @@ class SectorController extends Controller
 
     public function index()
     {
-        $sectors = Sector::withCount('users')->get();
+        $sectors = Sector::withCount('users')->paginate(4);
         // return view('sectors.index', compact('sectors'));
         return response()->json($sectors);
     }
