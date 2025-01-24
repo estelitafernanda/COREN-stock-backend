@@ -17,11 +17,12 @@ class Sector extends Model
         'idSector',
         'name',
         'headSector',
+        'unity',
     ];
 
     public function products(){
 
-        return $this->hasMany(Product::class, 'idDepartment', 'id');
+        return $this->hasMany(Product::class, 'idSector', 'idSector');
     }
 
     public function listProducts(){

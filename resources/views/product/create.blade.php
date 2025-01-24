@@ -40,13 +40,13 @@
 
             <div class="form-group">
                 <label for="code">code:</label>
-                <input type="text" class="form-control" id="code" name="code" value="{{ old('code') }}" required>
+                <input type="text" class="form-control" id="cod" name="cod" value="{{ old('cod') }}" required>
                 
             </div>
 
             <div class="form-group">
-                <label for="idDepartment">idDepartment:</label>
-                <input type="number" class="form-control @error('email') is-invalid @enderror" id="idDepartment" name="idDepartment" value="{{ old('idDepartment') }}" required>
+                <label for="idSector">idDepartment:</label>
+                <input type="number" class="form-control @error('email') is-invalid @enderror" id="idSector" name="idSector" value="{{ old('idSector') }}" required>
                 
             </div>
 

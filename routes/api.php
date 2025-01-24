@@ -26,10 +26,16 @@ Route::get('showSuppliers', [SuppliersController::class, 'index']);
 Route::get('sectors/{idSector}', [SectorController::class,'show'])->name('sectors.show');
 Route::get('suppliers/{idSupplier}', [SuppliersController::class,'show'])->name('suppliers.show');
 Route::get('products/{idProduct}', [ProductController::class,'show'])->name('products.show');
-Route::get('movements/{idMovement}', [MovementController::class,'show'])->name('movements.show');
 
 Route::post('addRequest', [RequestController::class, 'store']);
 Route::post('addProduct', [ProductController::class, 'store']);
+Route::get('productFiltered', [ProductController::class, 'showFiltered']);
 Route::post('addSector', [SectorController::class, 'store']);
 Route::post('addMovement', [MovementController::class, 'store']);
 Route::post('addSupplier', [SuppliersController::class, 'store']);
+
+
+Route::get('editProduct/{idProduct}/edit', [ProductController::class, 'edit']);
+
+Route::delete('sectors/{idSector}/delete', [SectorController::class, 'destroy'])->name('sectors.destroy');
+Route::delete('products/{idProduct}/delete', [ProductController::class, 'destroy'])->name('product.destroy');

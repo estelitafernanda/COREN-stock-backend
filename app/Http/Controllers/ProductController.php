@@ -39,7 +39,7 @@ class ProductController extends Controller
      */
     public function create()
     {
-        return view('product.create');
+        return view('products.create');
     }
 
     /**
@@ -73,10 +73,10 @@ class ProductController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $idProduct)
+    public function show(string $id)
     {
         
-        $product = Product::findOrFail($idProduct);
+        $product = Product::findOrFail($id);
         return $product;
         // return view('product.show', compact('product'));
 
@@ -88,7 +88,7 @@ class ProductController extends Controller
     public function edit(string $idProduct)
     {
         $product = Product::findOrFail($idProduct);
-        return view('product.edit', compact('product'));
+        return view('products.edit', compact('product'));
     }
 
     /**
@@ -110,13 +110,18 @@ class ProductController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $idProduct)
+    public function destroy(string $id)
     {
         try {
-            $this->deleteProduct->execute($idProduct);
+            $this->deleteProduct->execute($id);
             return redirect()->route('products.index')->with('success', 'Produto excluído com sucesso!');
         } catch (\Exception $e) {
             return back()->with('error', 'Erro ao excluir o Produto: ' . $e->getMessage());
         }
+    }
+
+    public function showFiltered(){
+        $results = Product::all();
+        return $results;
     }
 }

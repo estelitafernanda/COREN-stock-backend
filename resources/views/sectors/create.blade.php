@@ -34,6 +34,12 @@
                 <input type="text" name="headSector" id="headSector" class="form-control" required>
             </div>
 
+            <div class="form-group">
+                <label for="unity">Chefe do Unidade</label>
+                <input type="unity" name="unity" id="unity" class="form-control" required>
+            </div>
+
+
 
 
             <button type="submit" class="btn btn-primary">Criar Setor</button>

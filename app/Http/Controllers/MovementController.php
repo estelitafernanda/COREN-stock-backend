@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Movement;
-use App\Models\RequestModel;
 use App\UseCases\Movement\DeleteMovement;
 
 class MovementController extends Controller
@@ -14,12 +13,10 @@ class MovementController extends Controller
      */
     public function index()
     {
-        $requests = Movement::with(['product', 'userRequest', 'request'])->paginate(4);
-
-        $requests = $requests->map(function($request) {
-            // estrutura json de movimento ᕙ(`▿´)ᕗ
-            $result = [
-                // movement (tudo)
+        $requests = Movement::with(['product', 'userRequest.sector', 'request'])->paginate(3);
+    
+        $requests->getCollection()->transform(function ($request) {
+            return [
                 'idMovement' => $request->idMovement,
                 'quantity' => $request->quantity,
                 'movementDate' => $request->movementDate,
@@ -27,22 +24,23 @@ class MovementController extends Controller
                 'idUserResponse' => $request->idUserResponse,
                 'idRequest' => $request->idRequest,
                 
-                // produto
                 'product_name' => $request->product ? $request->product->nameProduct : 'Produto não encontrado',
                 'currentQuantity' => $request->product ? $request->product->currentQuantity : 'Quantidade não encontrada',
-    
-                // usuário
+        
                 'user_name_request' => $request->userRequest ? $request->userRequest->nameUser : 'Usuário não encontrado',
-                'user_sector' => $request->userRequest && $request->userRequest->idSector ? $request->userRequest->idSector : 'Setor não encontrado',
-    
-                // requisição
+                'user_sector' => $request->userRequest && $request->userRequest->sector ? $request->userRequest->sector->nameSector : 'Setor não encontrado',
+        
                 'request_describe' => $request->request ? $request->request->describe : 'Descrição não encontrada',
             ];
-    
-            return $result;
         });
     
-        return response()->json($requests);
+        return response()->json([
+            'data' => $requests->items(), 
+            'current_page' => $requests->currentPage(),
+            'last_page' => $requests->lastPage(),
+            'per_page' => $requests->perPage(),
+            'total' => $requests->total(),
+        ]);
     }
 
     /**
@@ -50,8 +48,7 @@ class MovementController extends Controller
      */
     public function create()
     {
-        $requests = RequestModel::all();
-        return view('movements.create', compact('requests'));
+        return view('movements.create');
     }
 
     /**
@@ -79,28 +76,27 @@ class MovementController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $idMovement)
+    public function show(string $id)
     {
-        $movement = Movement::findOrFail($idMovement);
-        return $movement;
-        //return view('movements.show', compact('movement'));
+        $movement = Movement::findOrFail($id);
+        return view('movements.show', compact('movement'));
     }
 
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $idMovement)
+    public function edit(string $id)
     {
-        $movements = Movement::findOrFail($idMovement);
-        return view('movements.edit', compact('movements'));
+        $movement = Movement::findOrFail($id);
+        return view('movements.edit', compact('movement'));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $idMovement, UpdateMovement $updateMovement)
+    public function update(Request $request, string $id, UpdateMovement $updateMovement)
     {
-        $movement = Movement::findOrFail($idMovement);
+        $movement = Movement::findOrFail($id);
 
         $validated = $request->validate([
             'idProduct' => 'required|integer|exists:products,idProduct',
@@ -122,9 +118,9 @@ class MovementController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $idMovement, DeleteMovement $deleteMovement)
+    public function destroy(string $id, DeleteMovement $deleteMovement)
     {
-        $deleteMovement->execute($idMovement);
+        $deleteMovement->execute($id);
 
         return redirect()->route('movements.index')->with('success', 'Movimentação excluída com sucesso!');
     }
