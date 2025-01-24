@@ -60,7 +60,7 @@ class RequestModel extends Model
         $movement->idUserRequest = $this->idUser;
         $movement->idOriginSector = $this->user->sector->idSector;
         $movement->idDestinationSector = $this->user->sector->idSector; 
-        $movement->movementStatus = 'em espera';
+        $movement->movementStatus = 'Em Espera';
         $movement->idRequest = $this->idRequest;
         $movement->save();
     }   

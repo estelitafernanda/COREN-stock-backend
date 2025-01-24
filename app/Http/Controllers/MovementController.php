@@ -13,12 +13,10 @@ class MovementController extends Controller
      */
     public function index()
     {
-        $requests = Movement::with(['product', 'userRequest', 'request'])->paginate(4);
-
-        $requests = $requests->map(function($request) {
-            // estrutura json de movimento ᕙ(`▿´)ᕗ
-            $result = [
-                // movement (tudo)
+        $requests = Movement::with(['product', 'userRequest.sector', 'request'])->paginate(3);
+    
+        $requests->getCollection()->transform(function ($request) {
+            return [
                 'idMovement' => $request->idMovement,
                 'quantity' => $request->quantity,
                 'movementDate' => $request->movementDate,
@@ -26,22 +24,23 @@ class MovementController extends Controller
                 'idUserResponse' => $request->idUserResponse,
                 'idRequest' => $request->idRequest,
                 
-                // produto
                 'product_name' => $request->product ? $request->product->nameProduct : 'Produto não encontrado',
                 'currentQuantity' => $request->product ? $request->product->currentQuantity : 'Quantidade não encontrada',
-    
-                // usuário
+        
                 'user_name_request' => $request->userRequest ? $request->userRequest->nameUser : 'Usuário não encontrado',
-                'user_sector' => $request->userRequest && $request->userRequest->idSector ? $request->userRequest->idSector : 'Setor não encontrado',
-    
-                // requisição
+                'user_sector' => $request->userRequest && $request->userRequest->sector ? $request->userRequest->sector->nameSector : 'Setor não encontrado',
+        
                 'request_describe' => $request->request ? $request->request->describe : 'Descrição não encontrada',
             ];
-    
-            return $result;
         });
     
-        return response()->json($requests);
+        return response()->json([
+            'data' => $requests->items(), 
+            'current_page' => $requests->currentPage(),
+            'last_page' => $requests->lastPage(),
+            'per_page' => $requests->perPage(),
+            'total' => $requests->total(),
+        ]);
     }
 
     /**
