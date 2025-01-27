@@ -10,7 +10,7 @@
         <tr>
     </thead>
     <tbody>
-        @foreach($dados as $request)
+        @foreach($requests as $request)
         <tr>
             <td>{{ $request->describe }}</td>
             <td>{{ $request->quantity }}</td>

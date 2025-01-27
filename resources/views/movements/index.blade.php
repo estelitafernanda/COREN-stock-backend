@@ -14,15 +14,12 @@
             </tr>
         </thead>
         <tbody>
-            @foreach($dados as $movement)
+            @foreach($requests->data as $movement)
             <tr>
                 <td>{{ $movement->idMovement }}</td>
-                <td>{{ $movement->idUserRequest }}</td>
+                <td>{{ $movement->product }}</td>
                 <td>{{ ucfirst($movement->movementStatus) }}</td>
                 <td>{{ $movement->created_at }}</td>
-                <td>
-
-                </td>
             </tr>
             @endforeach
         </tbody>

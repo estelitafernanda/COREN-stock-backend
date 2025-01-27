@@ -41,6 +41,8 @@ class MovementController extends Controller
             'per_page' => $requests->perPage(),
             'total' => $requests->total(),
         ]);
+
+        // return view('movements.index', compact('requests'));
     }
 
     /**

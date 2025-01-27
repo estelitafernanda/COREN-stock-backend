@@ -50,8 +50,8 @@ class RequestController extends Controller
         });
 
         return response()->json($requests);
-            // $dados = RequestModel::all();
-            // return view('requests.index', compact('dados'));
+        // $dados = RequestModel::all();
+        // return view('requests.index', compact('requests'));
     }
 
     /**
@@ -98,8 +98,19 @@ class RequestController extends Controller
      */
     public function show(string $id)
     {
-        $request = RequestModel::findOrFail($id);
-        return view('requests.show', compact('request'));
+        $request = RequestModel::with(['product', 'user'])->findOrFail($id);
+
+
+        $request->product_name = $request->product ? $request->product->nameProduct : 'Produto não encontrado';
+        $request->user_name = $request->user ? $request->user->nameUser : 'Usuário não encontrado';
+        $request->sector_name = ($request->user && $request->user->sector) ? $request->user->sector->name : 'Setor não encontrado';
+
+        unset($request->idProduct);
+        unset($request->idUser);
+        unset($request->product);
+        unset($request->user);
+
+        return response()->json($request);
     }
 
     /**
