@@ -122,8 +122,11 @@ class MovementController extends Controller
      */
     public function destroy(string $id, DeleteMovement $deleteMovement)
     {
-        $deleteMovement->execute($id);
-
-        return redirect()->route('movements.index')->with('success', 'Movimentação excluída com sucesso!');
+        try {
+            $this->deleteMovement->execute($id);
+            return response()->json(['message' => 'Movimento excluído com sucesso!'], 200);
+        } catch (\Exception $e) {
+            return back()->json(['error' => 'Erro ao excluir o movimento: ' . $e->getMessage()], 500);
+        }
     }
 }

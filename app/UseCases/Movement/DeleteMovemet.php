@@ -12,10 +12,14 @@ class DeleteMovement
      * @param string $id
      * @return bool
      */
-    public function execute(string $id): bool
+    public function execute(string $id)
     {
-        $movement = Movement::findOrFail($id);
+        $request = Movement::find($id);
 
-        return $movement->delete();
+        if (!$request) {
+            throw new ModelNotFoundException("Movimento não encontrado.");
+        }
+
+        return $request->delete();
     }
 }

@@ -134,22 +134,20 @@ class RequestController extends Controller
     
             $this->updateRequest->execute($id, $request->all());
     
-            return redirect()->route('requests.index')->with('success', 'Pedido atualizado com sucesso!');
+            return response()->json(['message' => 'Pedido atualizado com sucesso!'], 200);
         } catch (\Exception $e) {
-            return back()->with('error', 'Erro ao atualizar o pedido: ' . $e->getMessage());
+            return back()->json(['error' => 'Erro ao atualizar o pedido: ' . $e->getMessage()], 500);
         }
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
+
     public function destroy(string $id, DeleteRequest $deleteRequest)
     {
         try {
             $this->deleteRequest->execute($id);
-            return redirect()->route('requests.index')->with('success', 'pedido excluído com sucesso!');
+            return response()->json(['message' => 'Pedido excluído com sucesso!'], 200);
         } catch (\Exception $e) {
-            return back()->with('error', 'Erro ao excluir o pedido: ' . $e->getMessage());
+            return response()->json(['error' => 'Erro ao excluir o pedido: ' . $e->getMessage()], 500);
         }
     }
 }

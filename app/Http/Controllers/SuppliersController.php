@@ -89,9 +89,9 @@ class SuppliersController extends Controller
     {
         try {
             $this->deleteSupplier->execute($id);
-            return redirect()->route('suppliers.index')->with('success', 'Fornecedor excluído com sucesso!');
+            return response()->json(['message' => 'Fornecedor excluído com sucesso!'], 200);
         } catch (\Exception $e) {
-            return back()->with('error', 'Erro ao excluir o Fornecedor: ' . $e->getMessage());
+            return response()->json(['error' => 'Erro ao excluir o Fornecedor: ' . $e->getMessage()], 500);
         }
     }
 }
