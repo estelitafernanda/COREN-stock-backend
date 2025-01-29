@@ -56,5 +56,7 @@ Route::get('/suppliers', [SuppliersController::class, 'index'])->name('suppliers
 Route::post('/movements', [MovementController::class, 'store'])->name('movements.store');
 Route::get('/movements/create', [MovementController::class, 'create'])->name('movements.create');
 Route::get('/movements', [MovementController::class, 'index'])->name('movements.index');
-
+Route::get('/movements/{idMovement}', [MovementController::class, 'show'])->name('movements.show');
+Route::get('/movements/{idMovement}/edit', [MovementController::class, 'edit'])->name('movements.edit'); 
+Route::put('/movements/{idMovement}/update', [MovementController::class, 'update'])->name('movements.update');
 

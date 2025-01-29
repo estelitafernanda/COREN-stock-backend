@@ -29,7 +29,7 @@ class CreateMovement
      */
     private function validate(array $data)
     {
-        $validator = \Validator::make($data, [
+        $validator = Validator::make($data, [
             'idProduct' => 'required|integer|exists:products,idProduct',
             'quantity' => 'required|integer|min:1',
             'movementDate' => 'required|date',

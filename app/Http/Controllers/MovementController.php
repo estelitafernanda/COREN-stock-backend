@@ -33,7 +33,7 @@ class MovementController extends Controller
                 'request_describe' => $request->request ? $request->request->describe : 'Descrição não encontrada',
             ];
         });
-    
+
         return response()->json([
             'data' => $requests->items(), 
             'current_page' => $requests->currentPage(),
@@ -41,8 +41,9 @@ class MovementController extends Controller
             'per_page' => $requests->perPage(),
             'total' => $requests->total(),
         ]);
-
-        // return view('movements.index', compact('requests'));
+        
+        //return view('movements.index', compact('requests'));
+    
     }
 
     /**

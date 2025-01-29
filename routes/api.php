@@ -28,6 +28,7 @@ Route::get('suppliers/{idSupplier}', [SuppliersController::class,'show'])->name(
 Route::get('products/{idProduct}', [ProductController::class,'show'])->name('products.show');
 Route::get('requests/{idRequest}', [RequestController::class,'show'])->name('requests.show');
 Route::get('users/{idUser}', [UserController::class,'show'])->name('users.show');
+Route::get('movements/{idMovement}', [MovementController::class, 'show'])->name('movements.show');
 
 Route::post('addRequest', [RequestController::class, 'store']);
 Route::post('addProduct', [ProductController::class, 'store']);
@@ -38,6 +39,7 @@ Route::post('addSupplier', [SuppliersController::class, 'store']);
 
 Route::put('products/{id}/update', [ProductController::class, 'update']);
 Route::put('requests/{id}/update', [RequestController::class, 'update']);
+Route::put('movements/{id}/update',[MovementController::class, 'update']); 
 
 Route::delete('requests/{id}', [RequestController::class, 'destroy'])->name('requests.destroy');
 Route::delete('sectors/{id}', [SectorController::class, 'destroy'])->name('sectors.destroy');
