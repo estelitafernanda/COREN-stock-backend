@@ -109,9 +109,9 @@ class SectorController extends Controller
     {
         try {
             $this->deleteSector->execute($id);
-            return redirect()->route('sectors.index')->with('success', 'Setor excluído com sucesso!');
+            return response()->json(['message' => 'Setor excluído com sucesso!'], 200);
         } catch (\Exception $e) {
-            return back()->with('error', 'Erro ao excluir o setor: ' . $e->getMessage());
+            return response()->json(['error' => 'Erro ao excluir o setor: ' . $e->getMessage()], 500);
         }
     }
     public function listProducts($idSector){

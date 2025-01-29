@@ -26,6 +26,8 @@ Route::get('showSuppliers', [SuppliersController::class, 'index']);
 Route::get('sectors/{idSector}', [SectorController::class,'show'])->name('sectors.show');
 Route::get('suppliers/{idSupplier}', [SuppliersController::class,'show'])->name('suppliers.show');
 Route::get('products/{idProduct}', [ProductController::class,'show'])->name('products.show');
+Route::get('requests/{idRequest}', [RequestController::class,'show'])->name('requests.show');
+Route::get('users/{idUser}', [UserController::class,'show'])->name('users.show');
 
 Route::post('addRequest', [RequestController::class, 'store']);
 Route::post('addProduct', [ProductController::class, 'store']);
@@ -34,8 +36,12 @@ Route::post('addSector', [SectorController::class, 'store']);
 Route::post('addMovement', [MovementController::class, 'store']);
 Route::post('addSupplier', [SuppliersController::class, 'store']);
 
+Route::put('products/{id}/update', [ProductController::class, 'update']);
+Route::put('requests/{id}/update', [RequestController::class, 'update']);
 
-Route::get('editProduct/{idProduct}/edit', [ProductController::class, 'edit']);
+Route::delete('requests/{id}', [RequestController::class, 'destroy'])->name('requests.destroy');
+Route::delete('sectors/{id}', [SectorController::class, 'destroy'])->name('sectors.destroy');
+Route::delete('movements/{id}', [MovementController::class, 'destroy'])->name('movements.destroy');
+Route::delete('suppliers/{id}', [SuppliersController::class, 'destroy'])->name('suppliers.destroy');
+Route::delete('products/{id}', [ProductController::class, 'destroy'])->name('products.destroy');
 
-Route::delete('sectors/{idSector}/delete', [SectorController::class, 'destroy'])->name('sectors.destroy');
-Route::delete('products/{idProduct}/delete', [ProductController::class, 'destroy'])->name('product.destroy');

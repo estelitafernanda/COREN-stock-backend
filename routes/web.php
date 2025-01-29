@@ -31,7 +31,7 @@ Route::post('/requests', [RequestController::class, 'store'])->name('requests.st
 Route::get('/requests/create', [RequestController::class, 'create'])->name('requests.create');
 Route::get('/requests', [RequestController::class, 'index'])->name('requests.index');
 Route::get('/requests/{idRequest}', [RequestController::class,'show'])->name('requests.show');
-Route::delete('/requests/{idRequest}/delete', [RequestController::class, 'destroy'])->name('requests.destroy');
+Route::delete('/products/{idProduct}', [ProductController::class, 'destroy'])->name('products.destroy');
 Route::get('/requests/{idRequest}/edit', [RequestController::class, 'edit'])->name('requests.edit'); 
 Route::put('/requests/{idRequest}/update', [RequestController::class, 'update'])->name('requests.update');
 

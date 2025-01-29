@@ -101,9 +101,9 @@ class ProductController extends Controller
     
             $this->updateProduct->execute($idProduct, $request->all());
     
-            return redirect()->route('products.index')->with('success', 'Usuário atualizado com sucesso!');
+            return response()->json(['message' => 'Produto atualizado com sucesso!'], 200);
         } catch (\Exception $e) {
-            return back()->with('error', 'Erro ao atualizar o usuário: ' . $e->getMessage());
+            return response()->json(['error' => 'Erro ao excluir o pedido: ' . $e->getMessage()], 500);
         }
     }
 
@@ -114,9 +114,9 @@ class ProductController extends Controller
     {
         try {
             $this->deleteProduct->execute($id);
-            return redirect()->route('products.index')->with('success', 'Produto excluído com sucesso!');
+            return response()->json(['message' => 'Produto excluído com sucesso!'], 200);
         } catch (\Exception $e) {
-            return back()->with('error', 'Erro ao excluir o Produto: ' . $e->getMessage());
+            return back()->json(['error' => 'Erro ao excluir o produto: ' . $e->getMessage()], 500);
         }
     }
 

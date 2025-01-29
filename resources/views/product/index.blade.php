@@ -19,11 +19,11 @@
             <td>{{ $product->describe }}</td>
             <td><img src="/images/products/{{ $product->image }}" alt=""></td>
             <td>
-                <a href="{{ route('products.show', $product->code) }}">Ver</a>
-                <a href="{{ route('products.edit', $product->code) }}">Editar</a>
+                <a href="{{ route('products.show', $product->idProduct) }}">Ver</a>
+                <a href="{{ route('products.edit', $product->idProduct) }}">Editar</a>
             </td>
             <td>
-                <form action="{{ route('products.destroy', $product->idProduct) }}" method="POST" style="display:inline;">
+                <form action="{{ route('products.destroy', $product->idProduct) }}" method="DELETE" style="display:inline;">
                     @csrf
                     @method('DELETE')
                     <button type="submit" class="btn btn-danger">Excluir</button>

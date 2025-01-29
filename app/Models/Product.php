@@ -17,7 +17,7 @@ class Product extends Model
         'idProduct',
         'nameProduct',
         'image',
-        'idSector',
+        'idDepartment',
         'code',
         'describe',
         'category',
