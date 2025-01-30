@@ -18,6 +18,7 @@ class CreateUser
             'email' => 'required|email|unique:users,email',
             'password' => 'required|min:6',
             'role' => 'required|string|max:255',
+            'idSector' => 'required|exists:sectors,idSector',
         ])->validate();
 
         // Criação do usuário
@@ -26,6 +27,7 @@ class CreateUser
             'email' => $validated['email'],
             'password' => bcrypt($validated['password']),
             'role' => $validated['role'],
+            'idSector' => $validated['idSector'], 
         ]);
     }
 }

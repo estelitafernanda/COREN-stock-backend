@@ -92,9 +92,9 @@ class SectorController extends Controller
     public function update(Request $request, string $id, UpdateSector $updateSector)
     {
         try {
-            $sector = Sector::findOrFail($id);
+            $sector = Sector::findOrFail($idSector);
     
-            $this->updateSector->execute($id, $request->all());
+            $this->updateSector->execute($idSector, $request->all());
     
             return redirect()->route('sectors.index')->with('success', 'setor atualizado com sucesso!');
         } catch (\Exception $e) {
@@ -105,10 +105,10 @@ class SectorController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id, DeleteSector $deleteSector)
+    public function destroy(string $idSector, DeleteSector $deleteSector)
     {
         try {
-            $this->deleteSector->execute($id);
+            $this->deleteSector->execute($idSector);
             return response()->json(['message' => 'Setor excluído com sucesso!'], 200);
         } catch (\Exception $e) {
             return response()->json(['error' => 'Erro ao excluir o setor: ' . $e->getMessage()], 500);

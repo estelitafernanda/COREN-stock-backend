@@ -70,6 +70,21 @@
                     <div class="invalid-feedback">{{ $message }}</div>
                 @enderror
             </div>
+            <div class="form-group">
+                <label for="idSector">Selecione o seu Departamento</label>
+                <select name="idSector" id="idSector" class="form-control" required>
+                    <option value="">Selecione um setor</option>
+                    @foreach($sectors as $sector)
+                        <option value="{{ $sector->idSector }}" {{ old('idSector') == $sector->idSector ? 'selected' : '' }}>
+                            {{ $sector->name }}
+                        </option>
+                    @endforeach
+                </select>
+
+                @error('idSector')
+                    <div class="invalid-feedback">{{ $message }}</div>
+                @enderror
+            </div>
 
             <div class="form-group">
                 <button type="submit" class="btn btn-primary">Criar Usuário</button>

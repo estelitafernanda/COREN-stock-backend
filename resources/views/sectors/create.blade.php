@@ -35,7 +35,7 @@
             </div>
 
             <div class="form-group">
-                <label for="unity">Chefe do Unidade</label>
+                <label for="unity">Unidade</label>
                 <input type="unity" name="unity" id="unity" class="form-control" required>
             </div>
 

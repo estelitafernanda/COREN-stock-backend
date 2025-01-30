@@ -51,6 +51,7 @@ class MovementController extends Controller
      */
     public function create()
     {
+
         return view('movements.create');
     }
 
@@ -79,11 +80,32 @@ class MovementController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
-    {
-        $movement = Movement::findOrFail($id);
-        return view('movements.show', compact('movement'));
-    }
+public function show(string $id)
+{
+    $movement = Movement::with(['product', 'userRequest.sector', 'request', 'originSector', 'destinationSector'])
+                        ->findOrFail($id);
+
+    return response()->json([
+        'idMovement' => $movement->idMovement,
+        'quantity' => $movement->quantity,
+        'movementDate' => $movement->movementDate,
+        'movementStatus' => $movement->movementStatus,
+        'idUserResponse' => $movement->idUserResponse,
+        'idRequest' => $movement->idRequest,
+
+        'product_name' => $movement->product ? $movement->product->nameProduct : 'Produto não encontrado',
+        'product_price' => $movement->product ? $movement->product->unitPrice : 'Preço não encontrado',
+        'currentQuantity' => $movement->product ? $movement->product->currentQuantity : 'Quantidade não encontrada',
+
+        'user_name_request' => $movement->userRequest ? $movement->userRequest->nameUser : 'Usuário não encontrado',
+        'user_sector' => $movement->userRequest && $movement->userRequest->sector ? $movement->userRequest->sector->name : 'Setor não encontrado',
+
+        'request_describe' => $movement->request ? $movement->request->describe : 'Descrição não encontrada',
+
+        'destination_sector_name' => $movement->destinationSector ? $movement->destinationSector->name : 'Setor de destino não encontrado',
+    ]);
+}
+
 
     /**
      * Show the form for editing the specified resource.

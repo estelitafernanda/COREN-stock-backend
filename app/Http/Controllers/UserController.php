@@ -6,6 +6,7 @@ use App\UseCases\User\DeleteUser;
 use App\UseCases\User\UpdateUser;
 use Illuminate\Http\Request;
 use App\Models\User;
+use App\Models\Sector;
 
 class UserController extends Controller
 {
@@ -28,7 +29,7 @@ class UserController extends Controller
         $requests = User::with(['sector'])->get();
 
         $requests = $requests->map(function($request) {
-            $request->sector_name = $request->sector ? $request->sector->name : 'Produto não encontrado';
+            $request->sector_name = $request->sector ? $request->sector->name : 'Setor não encontrado';
             
             unset($request->idSector);
             unset($request->sector);
@@ -43,8 +44,10 @@ class UserController extends Controller
      * Show the form for creating a new resource.
      */
     public function create()
-    {
-        return view('users.create');
+    {   
+        $user = User::all();
+        $sectors = Sector::all();
+        return view('users.create', compact('user', 'sectors'));
     }
 
     /**

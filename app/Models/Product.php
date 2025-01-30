@@ -31,7 +31,7 @@ class Product extends Model
 
     public function sector()
     {
-        return $this->belongsTo(Sector::class, 'idSector', 'idSector');
+        return $this->belongsTo(Sector::class, 'idSector', 'idDepartment');
     }
 
     public function requests()
