@@ -28,6 +28,7 @@ Route::get('suppliers/{idSupplier}', [SuppliersController::class,'show'])->name(
 Route::get('products/{idProduct}', [ProductController::class,'show'])->name('products.show');
 Route::get('requests/{idRequest}', [RequestController::class,'show'])->name('requests.show');
 Route::get('users/{idUser}', [UserController::class,'show'])->name('users.show');
+Route::get('movements/{idMovement}' , [MovementController::class, 'show'])->name('movements.show');
 
 Route::post('addRequest', [RequestController::class, 'store']);
 Route::post('addProduct', [ProductController::class, 'store']);
