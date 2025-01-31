@@ -25,14 +25,30 @@ class ProductController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
-    {
-        $products = Product::paginate(7);
 
-        return $products;
-    
-        // return view('product.index', compact('products'));
+
+    public function filterByCategory($category)
+    {
+        return Product::where('category', $category)->paginate(7);
     }
+    
+    public function index(Request $request)
+    {
+        try {
+            $category = $request->input('category');
+    
+            if ($category) {
+                $products = $this->filterByCategory($category);
+            } else {
+                $products = Product::paginate(7);
+            }
+            // return view('product.index', compact('products'));
+            return response()->json($products);
+        } catch (\Exception $e) {
+            return response()->json(['error' => 'Erro ao listar os produtos: ' . $e->getMessage()], 500);
+        }
+    }
+
 
     /**
      * Show the form for creating a new resource.

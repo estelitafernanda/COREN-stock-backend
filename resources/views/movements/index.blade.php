@@ -14,12 +14,22 @@
             </tr>
         </thead>
         <tbody>
-            @foreach($requests->data as $movement)
+            @foreach($requests as $movement)
             <tr>
                 <td>{{ $movement->idMovement }}</td>
-                <td>{{ $movement->product }}</td>
+                <td>{{ $movement->product->nameProduct ?? 'Produto não encontrado' }}</td>
                 <td>{{ ucfirst($movement->movementStatus) }}</td>
                 <td>{{ $movement->created_at }}</td>
+                <td>
+                    <!-- Formulário para enviar a requisição PATCH -->
+                    <form action="{{ route('movements.update', $movement->idMovement) }}" method="POST">
+                        @csrf
+                        @method('PATCH') <!-- Definindo o método como PATCH -->
+                        
+                        <!-- Botão para enviar o formulário -->
+                        <button type="submit" class="btn btn-warning">Atualizar Status</button>
+                    </form>
+                </td>
             </tr>
             @endforeach
         </tbody>

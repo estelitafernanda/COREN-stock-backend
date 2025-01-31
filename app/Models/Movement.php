@@ -55,6 +55,15 @@ class Movement extends Model
             return $this->belongsTo(RequestModel::class, 'idRequest', 'idRequest');
         }
 
+        public function atualizarQuantidadeProduto()
+        {
+            if ($this->movementStatus === 'entregue') {
+                $produto = $this->product;
+                $produto->currentQuantity -= $this->quantity;
+                $produto->save();
+            }
+        }
+
 
     // public function product()
     // {
