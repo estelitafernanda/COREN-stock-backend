@@ -41,9 +41,8 @@ class MovementController extends Controller
             'per_page' => $requests->perPage(),
             'total' => $requests->total(),
         ]);
-        
-        //return view('movements.index', compact('requests'));
-    
+        // $requests = Movement::with(['product', 'userRequest.sector', 'request']);
+        // return view('movements.index', compact('requests'));
     }
 
     /**
@@ -119,26 +118,25 @@ public function show(string $id)
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id, UpdateMovement $updateMovement)
+    public function update(Request $request, string $id)
     {
-        $movement = Movement::findOrFail($id);
-
-        $validated = $request->validate([
-            'idProduct' => 'required|integer|exists:products,idProduct',
-            'quantity' => 'required|integer|min:1',
-            'idRequest' => 'required|integer|exists:request, idRequest',
-            'movementDate' => 'required|date',
-            'idUserRequest' => 'required|integer|exists:request,idUser',
-            'idUserResponse' => 'required|integer|exists:users, idUser',
-            'idOriginSector' => 'nullable|integer|exists:sectors,idSector',
-            'idDestinationSector' => 'required|integer|exists:sectors,idSector',
-            'movementStatus' => 'required|string|max:255',
-        ]);
-
-        $updateMovement->execute($movement, $validated);
-
-        return redirect()->route('movements.index')->with('success', 'Movimentação atualizada com sucesso!');
+        $movement = Movement::find($id);
+        
+        if (!$movement) {
+            return response()->json(['message' => 'Movimento não encontrado'], 404);
+        }
+        
+        $movement->movementStatus = 'entregue'; 
+        $movement->save();
+        
+        $movement->atualizarQuantidadeProduto();
+        
+        return response()->json([
+            'message' => 'Movimento atualizado com sucesso',
+            'movement' => $movement
+        ], 200);
     }
+    
 
     /**
      * Remove the specified resource from storage.

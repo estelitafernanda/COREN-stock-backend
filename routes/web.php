@@ -45,6 +45,8 @@ Route::put('/sectors/{idSector}/update', [SectorController::class, 'update'])->n
 Route::get('/sectors/{idSector}/products', [SectorController::class, 'listProducts'])->name('sectors.products');
 Route::get('/sectors/{idSector}/target-products', [SectorController::class, 'targetProducts'])->name('sectors.target-products');
 
+Route::patch('/movements/{idMovement}', [MovementController::class, 'update'])->name('movements.update');
+
 Route::post('/suppliers', [SuppliersController::class, 'store'])->name('suppliers.store');
 Route::get('/suppliers/create', [SuppliersController::class, 'create'])->name('suppliers.create');
 Route::get('/suppliers/{idSupplier}', [SuppliersController::class, 'show'])->name('suppliers.show');

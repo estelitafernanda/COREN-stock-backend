@@ -127,17 +127,21 @@ class RequestController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id, UpdateRequest $updateRequest)
+    public function update(Request $request, string $id)
     {
-        try {
-            $requestion = RequestModel::findOrFail($id);
-    
-            $this->updateRequest->execute($id, $request->all());
-    
-            return response()->json(['message' => 'Pedido atualizado com sucesso!'], 200);
-        } catch (\Exception $e) {
-            return back()->json(['error' => 'Erro ao atualizar o pedido: ' . $e->getMessage()], 500);
+        $requestion = RequestModel::find($id);
+        
+        if (!$requestion) {
+            return response()->json(['message' => 'Requisição não encontrado'], 404);
         }
+        
+        $requestion->status = 'aceito'; 
+        $requestion->save();
+        
+        return response()->json([
+            'message' => 'Requisição atualizada com sucesso',
+            'movement' => $requestion
+        ], 200);
     }
 
 

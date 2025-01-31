@@ -37,10 +37,12 @@ Route::post('addSector', [SectorController::class, 'store']);
 Route::post('addMovement', [MovementController::class, 'store']);
 Route::post('addSupplier', [SuppliersController::class, 'store']);
 
+Route::patch('movements/{id}/update', [MovementController::class, 'update']);
 Route::put('products/{id}/update', [ProductController::class, 'update']);
 Route::put('requests/{id}/update', [RequestController::class, 'update']);
 Route::put('sectors/{id}/update', [SectorController::class, 'update']); 
 Route::put('movements/{id}/update',[MovementController::class, 'update']); 
+Route::put('suppliers/{id}/update', [SuppliersController::class, 'update']); 
 
 Route::delete('requests/{id}', [RequestController::class, 'destroy'])->name('requests.destroy');
 Route::delete('sectors/{id}', [SectorController::class, 'destroy'])->name('sectors.destroy');

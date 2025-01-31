@@ -1,35 +1,42 @@
-@extends('layouts.app')
+<!-- resources/views/product/index.blade.php -->
 
-<h1>Lista de Produtos</h1>
-<table>
-    <thead>
-        <tr>
-            <th>Código</th>
-            <th>Nome</th>
-            <th>Descrição</th>
-            <th>Imagem</th>
-        <tr>
-    </thead>
-    <tbody>
-       
-        @foreach($products as $product)
-        <tr>
-            <td>{{ $product->code }}</td>
-            <td>{{ $product->nameProduct }}</td>
-            <td>{{ $product->describe }}</td>
-            <td><img src="/images/products/{{ $product->image }}" alt=""></td>
-            <td>
-                <a href="{{ route('products.show', $product->idProduct) }}">Ver</a>
-                <a href="{{ route('products.edit', $product->idProduct) }}">Editar</a>
-            </td>
-            <td>
-                <form action="{{ route('products.destroy', $product->idProduct) }}" method="DELETE" style="display:inline;">
-                    @csrf
-                    @method('DELETE')
-                    <button type="submit" class="btn btn-danger">Excluir</button>
-                </form>
-            </td>
-        </tr>
-        @endforeach
-    </tbody>
-</table>
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lista de Produtos</title>
+</head>
+<body>
+
+    <h1>Lista de Produtos</h1>
+
+    <!-- Formulário de filtro -->
+    <form action="{{ route('products.index') }}" method="GET">
+        <label for="category">Filtrar por Categoria:</label>
+        <select name="category" id="category" onchange="this.form.submit()">
+            <option value="">Selecione uma categoria</option>
+            <option value="escritorio" {{ request('category') == 'escritorio' ? 'selected' : '' }}>Escritório</option>
+            <option value="alimentos" {{ request('category') == 'alimentos' ? 'selected' : '' }}>Alimentos</option>
+        </select>
+    </form>
+
+    <hr>
+
+    <!-- Exibição dos produtos -->
+    <div>
+        <h3>Produtos</h3>
+        <ul>
+            @foreach ($products as $product)
+                <li>{{ $product->nameProduct }} - Categoria: {{ $product->category }} - Preço: R$ {{ number_format($product->unitPrice, 2, ',', '.') }}</li>
+            @endforeach
+        </ul>
+    </div>
+
+    <!-- Paginação -->
+    <div>
+        {{ $products->links() }}
+    </div>
+
+</body>
+</html>

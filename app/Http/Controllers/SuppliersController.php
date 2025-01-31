@@ -76,7 +76,10 @@ class SuppliersController extends Controller
     
             $this->updateSupplier->execute($idSupplier, $request->all());
     
-            return redirect()->route('suppliers.index')->with('success', 'Fornecedor atualizado com sucesso!');
+            return response()->json([
+                'message' => 'Fornecedor atualizado com sucesso', 
+            ], 200);
+
         } catch (\Exception $e) {
             return back()->with('error', 'Erro ao atualizar o Fornecedor: ' . $e->getMessage());
         }
