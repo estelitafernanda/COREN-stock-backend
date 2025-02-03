@@ -21,10 +21,39 @@ class SuppliersController extends Controller
         $this->deleteSupplier = $deleteSupplier;
         $this->updateSupplier = $updateSupplier;
     }
+    public function filterSuppliers($query)
+    {
+
+        $query->when(request('address'), function ($q) {
+            return $q->where('address', request('address'));
+        });
+        
+        $query->when(request('telephone'), function ($q) {
+            return $q->where('telephone', request('telephone'));
+        });
+
+        $query->when(request('responsible'), function ($q) {
+            return $q->where('responsible', request('responsible'));
+        });
+
+        $query->when(request('cnpj'), function ($q) {
+            return $q->where('cnpj', request('cnpj'));
+        });
+        $query->when(request('email'), function ($q){
+            return $q->where('email', request('email'));
+        });
+
+        return $query;
+    }
 
     public function index()
     {
-        $suppliers = Supplier::with('products')->paginate(4);
+        $query = Supplier::with('products');
+        $query = $this->filterSuppliers($query);
+    
+        $suppliers = $query->paginate(4);
+        $suppliers->appends(request()->query());
+
         return response()->json($suppliers);
     }
 

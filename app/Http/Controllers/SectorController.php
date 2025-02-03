@@ -20,10 +20,32 @@ class SectorController extends Controller
         $this->deleteSector = $deleteSector;
         $this->updateSector = $updateSector;
     }
+    public function filterSectors($query)
+    {
+
+        $query->when(request('unity'), function ($q) {
+            return $q->where('unity', request('unity'));
+        });
+        
+        $query->when(request('name'), function ($q) {
+            return $q->where('name', request('name'));
+        });
+
+        $query->when(request('headSector'), function ($q) {
+            return $q->where('headSector', request('headSector'));
+        });
+        
+        return $query;
+    }
 
     public function index()
     {
-        $sectors = Sector::withCount('users')->paginate(4);
+        $query = Sector::withCount('users');
+        $query = $this->filterSectors($query);
+
+        $sectors = $query->paginate(4);
+        $sectors->appends(request()->query());
+
         // return view('sectors.index', compact('sectors'));
         return response()->json($sectors);
     }

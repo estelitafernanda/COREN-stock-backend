@@ -39,7 +39,7 @@ class ProductController extends Controller
     
             if ($category) {
                 $products = $this->filterByCategory($category);
-            } else {
+            }else {
                 $products = Product::paginate(7);
             }
             // return view('product.index', compact('products'));

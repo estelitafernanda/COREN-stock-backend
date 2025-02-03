@@ -20,39 +20,67 @@ class RequestController extends Controller
 
      
     public function __construct(CreateRequest $createRequest, UpdateRequest $updateRequest, DeleteRequest $deleteRequest)
-     {
+    {
         $this->updateRequest = $updateRequest;
         $this->deleteRequest = $deleteRequest;
         $this->createRequest = $createRequest;
-     }
+    }
  
+    public function filterRequests($query)
+    {
 
-    /**
-     * Display a listing of the resource.
-     */
+        $query->when(request('product_id'), function ($q) {
+            return $q->where('idProduct', request('product_id'));
+        });
+        
+        $query->when(request('status'), function ($q) {
+            return $q->where('status', request('status'));
+        });
+
+        $query->when(request('date'), function ($q) {
+            return $q->whereDate('requestDate', request('date'));
+        });
+
+        $query->when(request('user_id'), function ($q) {
+            return $q->where('idUser', request('user_id'));
+        });
+        
+        return $query;
+    }
+    
     public function index()
     {
-        $maxQnt = 4;
 
-        $requests = RequestModel::with(['product', 'user'])->paginate($maxQnt);
+        $query = RequestModel::with(['product', 'user']);
+        $query = $this->filterRequests($query);
+
+        $requests = $query->paginate(4);
+        
+        $requests->appends(request()->query());
+    
+
+        $products = Product::all();
+        $users = User::all();
+    
 
         $requests->getCollection()->transform(function($request) {
-            $request->product_name = $request->product ? $request->product->nameProduct : 'Produto não encontrado';
-            $request->user_name = $request->user ? $request->user->nameUser : 'Usuário não encontrado';
-            $request->sector_name = ($request->user && $request->user->sector) ? $request->user->sector->name : 'Setor não encontrado';
-
+            $request->product_name = $request->product->nameProduct;
+            $request->user_name = $request->user->nameUser;
+            $request->sector_name = $request->user->sector->name;
+            
             unset($request->idProduct);
             unset($request->idUser);
             unset($request->product);
             unset($request->user);
-
+            
             return $request;
         });
 
+        // return view('requests.index', compact('requests', 'products', 'users'));
+
         return response()->json($requests);
-        // $dados = RequestModel::all();
-        // return view('requests.index', compact('requests'));
     }
+     
 
     /**
      * Show the form for creating a new resource.
