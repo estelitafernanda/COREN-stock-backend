@@ -42,6 +42,7 @@ class ProductController extends Controller
             }else {
                 $products = Product::paginate(7);
             }
+
             // return view('product.index', compact('products'));
             return response()->json($products);
         } catch (\Exception $e) {

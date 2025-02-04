@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Movement;
+use App\Models\Product; 
+use App\Models\User; 
 use App\UseCases\Movement\DeleteMovement;
 
 class MovementController extends Controller
@@ -11,66 +13,64 @@ class MovementController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function filterMovements($query)
-    {
-
-        $query->when(request('product_name'), function ($q) {
-            return $q->where('nameProduct', request('product_name'));
+public function filterMovements($query)
+{
+    $query->when(request('product_name'), function ($q) {
+        return $q->whereHas('product', function ($q) {
+            $q->where('nameProduct', request('product_name'));
         });
-        
-        $query->when(request('movementStatus'), function ($q) {
-            return $q->where('movementStatus', request('movementStatus'));
-        });
+    });
+    
+    $query->when(request('movementStatus'), function ($q) {
+        return $q->where('movementStatus', request('movementStatus'));
+    });
 
-        $query->when(request('user_name_request'), function ($q) {
-            return $q->where('userRequest', request('user_name_request'));
+    $query->when(request('user_name_request'), function ($q) {
+        return $q->whereHas('userRequest', function ($q) {
+            $q->where('nameUser', request('user_name_request'));
         });
+    });
 
-        $query->when(request('movementDate'), function ($q) {
-            return $q->where('movementDate', request('movementDate'));
-        });
-        
-        return $query;
-    }
-
+    $query->when(request('movementDate'), function ($q) {
+        return $q->where('movementDate', request('movementDate'));
+    });
+    
+    return $query;
+}
     public function index()
     {
         $query = Movement::with(['product', 'userRequest.sector', 'request']);
         $query = $this->filterMovements($query);
-
+    
         $movements = $query->paginate(3);
-
         $movements->appends(request()->query());
-
-        $movements->getCollection()->transform(function ($request) {
+    
+        $movements->getCollection()->transform(function ($movement) {
             return [
-                'idMovement' => $request->idMovement,
-                'quantity' => $request->quantity,
-                'movementDate' => $request->movementDate,
-                'movementStatus' => $request->movementStatus,
-                'idUserResponse' => $request->idUserResponse,
-                'idRequest' => $request->idRequest,
-                
-                'product_name' => $request->product ? $request->product->nameProduct : 'Produto não encontrado',
-                'currentQuantity' => $request->product ? $request->product->currentQuantity : 'Quantidade não encontrada',
-        
-                'user_name_request' => $request->userRequest ? $request->userRequest->nameUser : 'Usuário não encontrado',
-                'user_sector' => $request->userRequest && $request->userRequest->sector ? $request->userRequest->sector->name : 'Setor não encontrado',
-        
-                'request_describe' => $request->request ? $request->request->describe : 'Descrição não encontrada',
+                'idMovement' => $movement->idMovement,
+                'quantity' => $movement->quantity,
+                'movementDate' => $movement->movementDate,
+                'movementStatus' => $movement->movementStatus,
+                'idUserResponse' => $movement->idUserResponse,
+                'idRequest' => $movement->idRequest,
+    
+                'product_name' => $movement->product ? $movement->product->nameProduct : 'Produto não encontrado',
+                'currentQuantity' => $movement->product ? $movement->product->currentQuantity : 'Quantidade não encontrada',
+    
+                'user_name_request' => $movement->userRequest ? $movement->userRequest->nameUser : 'Usuário não encontrado',
+                'user_sector' => $movement->userRequest && $movement->userRequest->sector ? $movement->userRequest->sector->name : 'Setor não encontrado',
+    
+                'request_describe' => $movement->request ? $movement->request->describe : 'Descrição não encontrada',
             ];
         });
+    
+        $products = Product::all(); 
+        $users = User::all();
 
-        return response()->json([
-            'data' => $movements->items(), 
-            'current_page' => $movements->currentPage(),
-            'last_page' => $movements->lastPage(),
-            'per_page' => $movements->perPage(),
-            'total' => $movements->total(),
-        ]);
-        // $requests = Movement::with(['product', 'userRequest.sector', 'request']);
-        // return view('movements.index', compact('requests'));
+        return response()->json($movements);
     }
+    
+    
 
     /**
      * Show the form for creating a new resource.

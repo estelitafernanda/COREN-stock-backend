@@ -21,9 +21,13 @@ class SuppliersController extends Controller
         $this->deleteSupplier = $deleteSupplier;
         $this->updateSupplier = $updateSupplier;
     }
+
+
     public function filterSuppliers($query)
     {
-
+        $query->when(request('name'), function ($q) {
+            return $q->where('name', 'like', '%' . request('name') . '%');
+        });
         $query->when(request('address'), function ($q) {
             return $q->where('address', request('address'));
         });
@@ -45,7 +49,9 @@ class SuppliersController extends Controller
 
         return $query;
     }
-
+    public function search(){
+        
+    }
     public function index()
     {
         $query = Supplier::with('products');
