@@ -37,10 +37,20 @@ public function filterMovements($query)
     
     return $query;
 }
-    public function index()
+    public function index(Request $request)
     {
         $query = Movement::with(['product', 'userRequest.sector', 'request']);
         $query = $this->filterMovements($query);
+    
+        if ($request->has('search') && $request->input('search') != '') {
+            $search = $request->input('search');
+            $query->whereHas('product', function ($q) use ($search) {
+                $q->where('nameProduct', 'LIKE', "%{$search}%");
+            })
+            ->orWhereHas('userRequest', function ($q) use ($search) {
+                $q->where('nameUser', 'LIKE', "%{$search}%");
+            });
+        }
     
         $movements = $query->paginate(3);
         $movements->appends(request()->query());

@@ -36,11 +36,19 @@ class ProductController extends Controller
     {
         try {
             $category = $request->input('category');
+            $search = $request->input('search');
     
             if ($category) {
                 $products = $this->filterByCategory($category);
             }else {
-                $products = Product::paginate(7);
+                if (!empty($search)) {
+                    $query = Product::where('nameProduct', 'LIKE', "%{$search}%")
+                                    ->orWhere('describe', 'LIKE', "%{$search}%");
+    
+                    $products = $query->paginate(7);
+                } else {
+                    $products = Product::paginate(7);
+                }
             }
 
             // return view('product.index', compact('products'));

@@ -49,4 +49,3 @@ Route::delete('sectors/{id}', [SectorController::class, 'destroy'])->name('secto
 Route::delete('movements/{id}', [MovementController::class, 'destroy'])->name('movements.destroy');
 Route::delete('suppliers/{id}', [SuppliersController::class, 'destroy'])->name('suppliers.destroy');
 Route::delete('products/{id}', [ProductController::class, 'destroy'])->name('products.destroy');
-

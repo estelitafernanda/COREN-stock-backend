@@ -49,13 +49,16 @@ class SuppliersController extends Controller
 
         return $query;
     }
-    public function search(){
-        
-    }
-    public function index()
+    public function index(Request $request)
     {
         $query = Supplier::with('products');
         $query = $this->filterSuppliers($query);
+
+        if ($request->has('search') && $request->input('search') != '') {
+            $search = $request->input('search');
+            $query->where('name', 'LIKE', "%{$search}%")
+            ->orWhere('address', 'LIKE', "%{$search}%"); 
+        }
     
         $suppliers = $query->paginate(4);
         $suppliers->appends(request()->query());

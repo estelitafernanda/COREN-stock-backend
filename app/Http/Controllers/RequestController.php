@@ -48,11 +48,22 @@ class RequestController extends Controller
         return $query;
     }
     
-    public function index()
+    public function index(Request $request)
     {
 
         $query = RequestModel::with(['product', 'user']);
         $query = $this->filterRequests($query);
+        
+        if ($request->has('search') && $request->input('search') != '') {
+            $search = $request->input('search');
+
+            $query->whereHas('product', function($q) use ($search) {
+                $q->where('nameProduct', 'LIKE', "%{$search}%");
+            })
+            ->orWhereHas('user', function($q) use ($search) {
+                $q->where('nameUser', 'LIKE', "%{$search}%");  
+            });
+        }
 
         $requests = $query->paginate(4);
         
