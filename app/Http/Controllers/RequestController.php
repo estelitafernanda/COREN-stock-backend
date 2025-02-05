@@ -129,9 +129,9 @@ class RequestController extends Controller
         $request = RequestModel::with(['product', 'user'])->findOrFail($id);
 
 
-        $request->product_name = $request->product ? $request->product->nameProduct : 'Produto não encontrado';
-        $request->user_name = $request->user ? $request->user->nameUser : 'Usuário não encontrado';
-        $request->sector_name = ($request->user && $request->user->sector) ? $request->user->sector->name : 'Setor não encontrado';
+        $request->product_name = $request->product->nameProduct;
+        $request->user_name =  $request->user->nameUser;
+        $request->sector_name =  $request->user->sector->name;
 
         unset($request->idProduct);
         unset($request->idUser);

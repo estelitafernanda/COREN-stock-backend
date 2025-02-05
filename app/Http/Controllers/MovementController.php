@@ -54,13 +54,13 @@ public function filterMovements($query)
                 'idUserResponse' => $movement->idUserResponse,
                 'idRequest' => $movement->idRequest,
     
-                'product_name' => $movement->product ? $movement->product->nameProduct : 'Produto não encontrado',
-                'currentQuantity' => $movement->product ? $movement->product->currentQuantity : 'Quantidade não encontrada',
+                'product_name' => $movement->product->nameProduct,
+                'currentQuantity' => $movement->product->currentQuantity,
     
-                'user_name_request' => $movement->userRequest ? $movement->userRequest->nameUser : 'Usuário não encontrado',
-                'user_sector' => $movement->userRequest && $movement->userRequest->sector ? $movement->userRequest->sector->name : 'Setor não encontrado',
-    
-                'request_describe' => $movement->request ? $movement->request->describe : 'Descrição não encontrada',
+                'user_name_request' => $movement->userRequest->nameUser,
+                'user_sector' => $movement->userRequest->sector->name,
+
+                'request_describe' => $movement->request->describe ,
             ];
         });
     
@@ -119,16 +119,16 @@ public function show(string $id)
         'idUserResponse' => $movement->idUserResponse,
         'idRequest' => $movement->idRequest,
 
-        'product_name' => $movement->product ? $movement->product->nameProduct : 'Produto não encontrado',
-        'product_price' => $movement->product ? $movement->product->unitPrice : 'Preço não encontrado',
-        'currentQuantity' => $movement->product ? $movement->product->currentQuantity : 'Quantidade não encontrada',
+        'product_name' => $movement->product->nameProduct,
+        'product_price' =>  $movement->product->unitPrice,
+        'currentQuantity' =>  $movement->product->currentQuantity,
 
-        'user_name_request' => $movement->userRequest ? $movement->userRequest->nameUser : 'Usuário não encontrado',
-        'user_sector' => $movement->userRequest && $movement->userRequest->sector ? $movement->userRequest->sector->name : 'Setor não encontrado',
+        'user_name_request' =>  $movement->userRequest->nameUser,
+        'user_sector' =>  $movement->userRequest->sector->name,
 
-        'request_describe' => $movement->request ? $movement->request->describe : 'Descrição não encontrada',
+        'request_describe' =>  $movement->request->describe,
 
-        'destination_sector_name' => $movement->destinationSector ? $movement->destinationSector->name : 'Setor de destino não encontrado',
+        'destination_sector_name' =>  $movement->destinationSector->name,
     ]);
 }
 
