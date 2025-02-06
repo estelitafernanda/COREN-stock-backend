@@ -45,8 +45,8 @@
             </div>
 
             <div class="form-group">
-                <label for="idDepartment">idDepartment:</label>
-                <input type="number" class="form-control @error('email') is-invalid @enderror" id="idDepartment" name="idDepartment" value="{{ old('idDepartment') }}" required>
+                <label for="idSector">Departamento:</label>
+                <input type="number" class="form-control @error('email') is-invalid @enderror" id="idSector" name="idSector" value="{{ old('idSector') }}" required>
                 
             </div>
 
@@ -84,7 +84,7 @@
 
 
             <div class="form-group">
-                <button type="submit" class="btn btn-primary">Criar Usuário</button>
+                <button type="submit" class="btn btn-primary">adicionar produto</button>
             </div>
         </form>
     </div>

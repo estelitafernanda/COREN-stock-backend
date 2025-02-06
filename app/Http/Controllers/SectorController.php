@@ -38,10 +38,17 @@ class SectorController extends Controller
         return $query;
     }
 
-    public function index()
+    public function index(Request $request)
     {
         $query = Sector::withCount('users');
         $query = $this->filterSectors($query);
+
+        if ($request->has('search') && $request->input('search') != '') {
+            $search = $request->input('search');
+            $query->where('name', 'LIKE', "%{$search}%")
+            ->orWhere('unity', 'LIKE', "%{$search}%")
+            ->orWhere('headSector', 'LIKE', "%{$search}%"); 
+        }
 
         $sectors = $query->paginate(4);
         $sectors->appends(request()->query());

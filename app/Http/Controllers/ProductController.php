@@ -43,7 +43,9 @@ class ProductController extends Controller
             }else {
                 if (!empty($search)) {
                     $query = Product::where('nameProduct', 'LIKE', "%{$search}%")
-                                    ->orWhere('describe', 'LIKE', "%{$search}%");
+                                    ->orWhere('describe', 'LIKE', "%{$search}%")
+                                    ->orWhere('location', 'LIKE', "%{$search}%")
+                                    ->orWhere('code', 'LIKE', "%{$search}%");
     
                     $products = $query->paginate(7);
                 } else {

@@ -17,7 +17,7 @@ class Product extends Model
         'idProduct',
         'nameProduct',
         'image',
-        'idDepartment',
+        'idSector',
         'code',
         'describe',
         'category',
@@ -31,7 +31,7 @@ class Product extends Model
 
     public function sector()
     {
-        return $this->belongsTo(Sector::class, 'idSector', 'idDepartment');
+        return $this->belongsTo(Sector::class, 'idSector', 'idSector');
     }
 
     public function requests()
