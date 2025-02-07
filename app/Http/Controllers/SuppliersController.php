@@ -24,7 +24,12 @@ class SuppliersController extends Controller
 
 
     public function filterSuppliers($query)
-    {
+    {   
+        $query->when(request('product_id'), function ($q) {
+            return $q->whereHas('products', function ($q) {
+                $q->where('idProduct', request('product_id'));
+            });
+        });
         $query->when(request('name'), function ($q) {
             return $q->where('name', 'like', '%' . request('name') . '%');
         });
@@ -57,7 +62,9 @@ class SuppliersController extends Controller
         if ($request->has('search') && $request->input('search') != '') {
             $search = $request->input('search');
             $query->where('name', 'LIKE', "%{$search}%")
-            ->orWhere('address', 'LIKE', "%{$search}%"); 
+            ->orWhere('address', 'LIKE', "%{$search}%")
+            ->orWhere('responsible', 'LIKE', "%{$search}%")
+            ->orWhere('email', 'LIKE', "%{$search}%");
         }
     
         $suppliers = $query->paginate(4);
