@@ -156,23 +156,29 @@ public function show(string $id)
      * Update the specified resource in storage.
      */
     public function update(Request $request, string $id)
-    {
-        $movement = Movement::find($id);
-        
-        if (!$movement) {
-            return response()->json(['message' => 'Movimento não encontrado'], 404);
-        }
-        
-        $movement->movementStatus = 'entregue'; 
-        $movement->save();
-        
-        $movement->atualizarQuantidadeProduto();
-        
-        return response()->json([
-            'message' => 'Movimento atualizado com sucesso',
-            'movement' => $movement
-        ], 200);
+{
+    $movement = Movement::find($id);
+    
+    if (!$movement) {
+        return response()->json(['message' => 'Movimento não encontrado'], 404);
     }
+
+    $produto = $movement->product; 
+    
+    if ($movement->quantity > $produto->currentQuantity) {
+        return response()->json(['message' => 'Quantidade insuficiente no estoque'], 400);
+    }
+
+    $movement->movementStatus = 'entregue';
+    $movement->save();
+
+    $movement->atualizarQuantidadeProduto();
+
+    return response()->json([
+        'message' => 'Movimento atualizado com sucesso',
+        'movement' => $movement
+    ], 200);
+}
     
 
     /**

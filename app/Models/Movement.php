@@ -59,6 +59,11 @@ class Movement extends Model
         {
             if ($this->movementStatus === 'entregue') {
                 $produto = $this->product;
+        
+                if ($this->quantity > $produto->currentQuantity) {
+                    return; 
+                }
+        
                 $produto->currentQuantity -= $this->quantity;
                 $produto->save();
             }
