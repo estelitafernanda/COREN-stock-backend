@@ -23,6 +23,7 @@ class Movement extends Model
         'idDestinationSector',
         'idRequest',
         'movementStatus',
+        'type',
     ];
 
         public function product()
@@ -55,16 +56,23 @@ class Movement extends Model
             return $this->belongsTo(RequestModel::class, 'idRequest', 'idRequest');
         }
 
+
         public function atualizarQuantidadeProduto()
         {
-            if ($this->movementStatus === 'entregue') {
-                $produto = $this->product;
-        
-                if ($this->quantity > $produto->currentQuantity) {
-                    return; 
+            if ($this->type === 'saida'){
+                if ($this->movementStatus === 'entregue') {
+                    $produto = $this->product;
+            
+                    if ($this->quantity > $produto->currentQuantity) {
+                        return; 
+                    }
+            
+                    $produto->currentQuantity -= $this->quantity;
+                    $produto->save();
                 }
-        
-                $produto->currentQuantity -= $this->quantity;
+            } else if ($this->type === 'entrada'){
+                $produto = $this->product;
+                $produto->currentQuantity += $this->quantity;
                 $produto->save();
             }
         }

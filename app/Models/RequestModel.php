@@ -19,8 +19,8 @@ class RequestModel extends Model
         'status',
         'responseData',
         'idProduct',
-        'requestDate',
         'quantity',
+        'type', 
     ];
 
     public function product()
@@ -44,6 +44,7 @@ class RequestModel extends Model
         static::updated(function ($request) {
             if ($request->getOriginal('status') !== 'aceito' && $request->status === 'aceito') {
                 $request->criarMovimento();
+                $request->sendNotification();
             }
         });
     }
@@ -53,6 +54,7 @@ class RequestModel extends Model
         if ($this->movement()->exists()) {
             return;
         }
+
         $movement = new Movement();
         $movement->idProduct = $this->idProduct;
         $movement->quantity = $this->quantity;
@@ -60,9 +62,19 @@ class RequestModel extends Model
         $movement->idUserRequest = $this->idUser;
         $movement->idOriginSector = $this->user->sector->idSector;
         $movement->idDestinationSector = $this->user->sector->idSector; 
+        $movement->type = $this->type;
         $movement->movementStatus = 'Em Espera';
         $movement->idRequest = $this->idRequest;
         $movement->save();
+
+        $this->sendNotification("Um novo movimento foi criado para a requisição {$this->idRequest}.");
     }   
+
+    public function sendNotification($message){
+        Notification::create([
+            'message' => $message,
+            'idRequest' => $this->idRequest,
+        ]);
+    }
 
 }

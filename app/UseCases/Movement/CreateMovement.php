@@ -36,6 +36,7 @@ class CreateMovement
             'idRequest' => 'required|integer|exists:request, idRequest',
             'idUserRequest' => 'required|integer|exists:request,idUser',
             'idUserResponse' => 'required|integer|exists:users, idUser',
+            'type' => 'required|string|exists: request, type', 
             'idOriginSector' => 'nullable|integer|exists:sectors,idSector',
             'idDestinationSector' => 'required|integer|exists:sectors,idSector',
             'movementStatus' => 'required|string|max:255',

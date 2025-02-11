@@ -59,6 +59,14 @@
                 <label for="requestDate">Data do Pedido</label>
                 <input type="date" name="requestDate" id="requestDate" class="form-control" required>
             </div>
+            <div class="form-grupo">
+                <label for="type">Tipo de Pedido</label>
+                <select name="type" id="type" class="form-control" required>
+                    <option value="">Selecione o tipo de pedido</option>
+                    <option value="{{$requests->type}}">Entrada</option>
+                    <option value="{{$requests->type}}">Saída</option>
+                </input>
+            </div>
 
 
             <button type="submit" class="btn btn-primary">Criar Pedido</button>

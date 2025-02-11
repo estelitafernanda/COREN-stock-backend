@@ -8,6 +8,7 @@ use App\Http\Controllers\ProductController;
 use App\Http\Controllers\SectorController;
 use App\Http\Controllers\MovementController;
 use App\Http\Controllers\RequestController;
+use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\SuppliersController;
 
 Route::get('/user', function (Request $request) {
@@ -49,3 +50,5 @@ Route::delete('sectors/{id}', [SectorController::class, 'destroy'])->name('secto
 Route::delete('movements/{id}', [MovementController::class, 'destroy'])->name('movements.destroy');
 Route::delete('suppliers/{id}', [SuppliersController::class, 'destroy'])->name('suppliers.destroy');
 Route::delete('products/{id}', [ProductController::class, 'destroy'])->name('products.destroy');
+
+Route::get('notifications', [NotificationController::class, 'index']);

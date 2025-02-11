@@ -63,6 +63,8 @@ public function filterMovements($query)
                 'movementStatus' => $movement->movementStatus,
                 'idUserResponse' => $movement->idUserResponse,
                 'idRequest' => $movement->idRequest,
+
+                'type' => $movement->request->type, 
     
                 'product_name' => $movement->product->nameProduct,
                 'currentQuantity' => $movement->product->currentQuantity,
@@ -105,6 +107,7 @@ public function filterMovements($query)
             'idUserResponse' => 'required|integer|exists:users, idUser',
             'idOriginSector' => 'nullable|integer|exists:sectors,idSector',
             'idDestinationSector' => 'required|integer|exists:sectors,idSector',
+            'type' => 'required|string|exists: request, type', 
             'movementStatus' => 'required|string|max:255',
         ]);
 
@@ -133,6 +136,7 @@ public function show(string $id)
         'product_price' =>  $movement->product->unitPrice,
         'currentQuantity' =>  $movement->product->currentQuantity,
 
+        'type' => $movement->request->type, 
         'user_name_request' =>  $movement->userRequest->nameUser,
         'user_sector' =>  $movement->userRequest->sector->name,
 
@@ -156,29 +160,29 @@ public function show(string $id)
      * Update the specified resource in storage.
      */
     public function update(Request $request, string $id)
-{
-    $movement = Movement::find($id);
-    
-    if (!$movement) {
-        return response()->json(['message' => 'Movimento não encontrado'], 404);
+    {
+        $movement = Movement::find($id);
+        
+        if (!$movement) {
+            return response()->json(['message' => 'Movimento não encontrado'], 404);
+        }
+
+        $produto = $movement->product; 
+        
+        if ($movement->quantity > $produto->currentQuantity) {
+            return response()->json(['message' => 'Quantidade insuficiente no estoque'], 400);
+        }
+
+        $movement->movementStatus = 'entregue';
+        $movement->save();
+
+        $movement->atualizarQuantidadeProduto();
+
+        return response()->json([
+            'message' => 'Movimento atualizado com sucesso',
+            'movement' => $movement
+        ], 200);
     }
-
-    $produto = $movement->product; 
-    
-    if ($movement->quantity > $produto->currentQuantity) {
-        return response()->json(['message' => 'Quantidade insuficiente no estoque'], 400);
-    }
-
-    $movement->movementStatus = 'entregue';
-    $movement->save();
-
-    $movement->atualizarQuantidadeProduto();
-
-    return response()->json([
-        'message' => 'Movimento atualizado com sucesso',
-        'movement' => $movement
-    ], 200);
-}
     
 
     /**

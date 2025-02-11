@@ -37,12 +37,11 @@ class RequestController extends Controller
             return $q->where('status', request('status'));
         });
 
-        $query->when(request('date'), function ($q) {
-            return $q->whereDate('requestDate', request('date'));
-        });
-
         $query->when(request('user_id'), function ($q) {
             return $q->where('idUser', request('user_id'));
+        });
+        $query->when(request('type'), function ($q) {
+            return $q->where('type', request('type'));
         });
         
         return $query;
@@ -53,15 +52,18 @@ class RequestController extends Controller
 
         $query = RequestModel::with(['product', 'user']);
         $query = $this->filterRequests($query);
-        
+
         if ($request->has('search') && $request->input('search') != '') {
             $search = $request->input('search');
 
-            $query->whereHas('product', function($q) use ($search) {
-                $q->where('nameProduct', 'LIKE', "%{$search}%");
-            })
-            ->orWhereHas('user', function($q) use ($search) {
-                $q->where('nameUser', 'LIKE', "%{$search}%");  
+            $query = $query->where(function($q) use ($search) {
+                $q->where('type', 'LIKE', "%{$search}%")
+                    ->orWhereHas('product', function($q) use ($search) {
+                        $q->where('nameProduct', 'LIKE', "%{$search}%");
+                    })
+                    ->orWhereHas('user', function($q) use ($search) {
+                        $q->where('nameUser', 'LIKE', "%{$search}%");
+                    });
             });
         }
 
@@ -119,13 +121,15 @@ class RequestController extends Controller
             'describe' => 'required|string',
             'idUser' => 'required|exists:users,idUser',
             'idProduct' => 'required|exists:products,idProduct',
+            'type' => 'required|string', 
             'requestDate' => 'required|date',
             'quantity' => 'required|integer|min:1',
         ]);
     
         $newRequest = RequestModel::create($validatedData);
         $newRequest->criarMovimento();
-    
+        $newRequest->sendNotification();
+
         return response()->json([
             'message' => 'Pedido criado com sucesso e movimentação registrada.',
             'request' => $newRequest,
