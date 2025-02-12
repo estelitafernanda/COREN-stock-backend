@@ -20,6 +20,9 @@ public function filterMovements($query)
             $q->where('nameProduct', request('product_name'));
         });
     });
+    $query->when(request('type'), function ($q) {
+        return $q->where('type', request('type'));
+    });
     
     $query->when(request('movementStatus'), function ($q) {
         return $q->where('movementStatus', request('movementStatus'));
@@ -44,7 +47,8 @@ public function filterMovements($query)
     
         if ($request->has('search') && $request->input('search') != '') {
             $search = $request->input('search');
-            $query->whereHas('product', function ($q) use ($search) {
+            $query->where('type', 'LIKE', "%{$search}%")
+                ->orWhereHas('product', function ($q) use ($search) {
                 $q->where('nameProduct', 'LIKE', "%{$search}%");
             })
             ->orWhereHas('userRequest', function ($q) use ($search) {
@@ -63,8 +67,7 @@ public function filterMovements($query)
                 'movementStatus' => $movement->movementStatus,
                 'idUserResponse' => $movement->idUserResponse,
                 'idRequest' => $movement->idRequest,
-
-                'type' => $movement->request->type, 
+                'type' => $movement->type, 
     
                 'product_name' => $movement->product->nameProduct,
                 'currentQuantity' => $movement->product->currentQuantity,
@@ -136,7 +139,7 @@ public function show(string $id)
         'product_price' =>  $movement->product->unitPrice,
         'currentQuantity' =>  $movement->product->currentQuantity,
 
-        'type' => $movement->request->type, 
+        'type' => $movement->type, 
         'user_name_request' =>  $movement->userRequest->nameUser,
         'user_sector' =>  $movement->userRequest->sector->name,
 
@@ -169,14 +172,15 @@ public function show(string $id)
 
         $produto = $movement->product; 
         
-        if ($movement->quantity > $produto->currentQuantity) {
+        if ($movement->quantity > $produto->currentQuantity && $movement->type === 'Saida') {
             return response()->json(['message' => 'Quantidade insuficiente no estoque'], 400);
         }
 
-        $movement->movementStatus = 'entregue';
-        $movement->save();
-
-        $movement->atualizarQuantidadeProduto();
+        if ($movement->type === 'Entrada' || $movement->type === 'Saida') {
+            $movement->movementStatus = 'entregue';
+            $movement->save();
+            $movement->atualizarQuantidadeProduto();
+        }        
 
         return response()->json([
             'message' => 'Movimento atualizado com sucesso',

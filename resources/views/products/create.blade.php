@@ -46,7 +46,7 @@
 
             <div class="form-group">
                 <label for="idSector">Departamento:</label>
-                <input type="number" class="form-control @error('email') is-invalid @enderror" id="idSector" name="idSector" value="{{ old('idSector') }}" required>
+                <input type="number" class="form-control @error('email') is-invalid @enderror" id="idDepartment" name="idDepartment" value="{{ old('idDepartment') }}" required>
                 
             </div>
 

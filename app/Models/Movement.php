@@ -59,7 +59,7 @@ class Movement extends Model
 
         public function atualizarQuantidadeProduto()
         {
-            if ($this->type === 'saida'){
+            if ($this->type === 'Saida'){
                 if ($this->movementStatus === 'entregue') {
                     $produto = $this->product;
             
@@ -70,10 +70,12 @@ class Movement extends Model
                     $produto->currentQuantity -= $this->quantity;
                     $produto->save();
                 }
-            } else if ($this->type === 'entrada'){
-                $produto = $this->product;
-                $produto->currentQuantity += $this->quantity;
-                $produto->save();
+            } else if ($this->type === 'Entrada'){
+                if ($this->movementStatus === 'entregue') {
+                    $produto = $this->product;
+                    $produto->currentQuantity += $this->quantity;
+                    $produto->save();
+                }
             }
         }
 

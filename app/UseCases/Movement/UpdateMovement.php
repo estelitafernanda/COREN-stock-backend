@@ -41,6 +41,7 @@ class UpdateMovement
             'idOriginSector' => 'nullable|integer|exists:sectors,idSector',
             'idDestinationSector' => 'required|integer|exists:sectors,idSector',
             'movementStatus' => 'required|string|max:255',
+            'type' => 'required|string|exists: request, type',
         ]);
 
         if ($validator->fails()) {

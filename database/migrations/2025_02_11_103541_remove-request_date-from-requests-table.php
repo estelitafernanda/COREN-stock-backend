@@ -11,9 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('request', function (Blueprint $table) {
-            $table->dropColumn('requestDate');
-        });
+        Schema::dropIfExists('responses'); 
     }
 
     /**
@@ -21,8 +19,11 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('request', function (Blueprint $table) {
-            $table->date('requestDate');
+        Schema::create('', function (Blueprint $table) {
+            $table->id('idResponse');
+            $table->boolean('isValid');
+            $table->text('response');
+            $table->timestamps();
         });
     }
 };
