@@ -19,7 +19,7 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::create('', function (Blueprint $table) {
+        Schema::create('responses', function (Blueprint $table) {
             $table->id('idResponse');
             $table->boolean('isValid');
             $table->text('response');

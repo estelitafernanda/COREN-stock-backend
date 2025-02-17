@@ -11,9 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('movements', function (Blueprint $table) {
-            $table->string('type')->nullable();
-            $table->foreign('type')->references('type')->on('request')->onDelete('cascade');
+        Schema::table('request', function (Blueprint $table) {
+            $table->dropColumn('requestDate');
         });
     }
 
@@ -22,9 +21,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('movements', function (Blueprint $table) {
-            $table->dropForeign(['type']);
-            $table->dropColumn('type');
-        });
+        
     }
 };

@@ -56,10 +56,6 @@
 
 
             <div class="form-group">
-                <label for="requestDate">Data do Pedido</label>
-                <input type="date" name="requestDate" id="requestDate" class="form-control" required>
-            </div>
-            <div class="form-group">
                 <label for="type">Tipo de Pedido</label>
                 <select name="type" id="type" class="form-control" required>
                     <option value="">Selecione o tipo de pedido</option>

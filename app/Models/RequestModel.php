@@ -44,7 +44,6 @@ class RequestModel extends Model
         static::updated(function ($request) {
             if ($request->getOriginal('status') !== 'aceito' && $request->status === 'aceito') {
                 $request->criarMovimento();
-                $request->sendNotification();
             }
         });
     }
@@ -57,6 +56,7 @@ class RequestModel extends Model
 
         $movement = new Movement();
         $movement->idProduct = $this->idProduct;
+        $movement->idResponsible = $this->user->idUser;
         $movement->quantity = $this->quantity;
         $movement->movementDate = now(); 
         $movement->idUserRequest = $this->idUser;

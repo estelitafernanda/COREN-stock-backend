@@ -10,12 +10,14 @@ return new class extends Migration
     {
         Schema::table('request', function (Blueprint $table) {
             $table->enum('type', ['Entrada', 'Saida'])->default('Entrada');
+            $table->index('type');
         });
     }
 
     public function down()
     {
-        Schema::table('requests', function (Blueprint $table) {
+        Schema::table('request', function (Blueprint $table) {
+            $table->dropIndex(['type']);
             $table->dropColumn('type');
         });
     }

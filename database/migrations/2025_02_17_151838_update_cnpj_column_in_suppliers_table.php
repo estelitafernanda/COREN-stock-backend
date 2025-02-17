@@ -9,20 +9,20 @@ return new class extends Migration
     /**
      * Run the migrations.
      */
-    public function up(): void
+    public function up()
     {
-        Schema::table('request', function (Blueprint $table) {
-            $table->string('type')->unique();
+        Schema::table('suppliers', function (Blueprint $table) {
+            $table->string('cnpj', 20)->change();
         });
     }
 
     /**
      * Reverse the migrations.
      */
-    public function down(): void
+    public function down()
     {
-        Schema::table('request', function (Blueprint $table) {
-            $table->dropColumn('type');
+        Schema::table('suppliers', function (Blueprint $table) {
+            $table->string('cnpj', 14)->change();
         });
     }
 };
