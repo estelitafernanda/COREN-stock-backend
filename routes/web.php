@@ -1,5 +1,4 @@
 <?php
-
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\ProductController;
@@ -7,10 +6,32 @@ use App\Http\Controllers\MovementController;
 use App\Http\Controllers\RequestController;
 use App\Http\Controllers\SuppliersController;
 use App\Http\Controllers\SectorController;
+use App\Http\Controllers\NotificationController;
+use App\Http\Controllers\TokenController;
+
+use Laravel\Socialite\Facades\Socialite;
+
+use Illuminate\Support\Facades\Http;
 
 Route::get('/', function () {
     return view('welcome');
 });
+
+
+//KEYCLOAK INTEGRATION
+Route::get('/keycloak/redirect', function () {
+    return Socialite::driver('keycloak')->redirect();
+});
+
+Route::get('/keycloak/callback', function () {
+    $user = Socialite::driver('keycloak')->user();
+    dd($user);
+});
+
+Route::get('logout', [TokenController::class, 'logout'])->name('logout');
+Route::get('/token-insert', [TokenController::class, 'showTokenForm'])->name('token.form');
+Route::post('/token-insert', [TokenController::class, 'validateToken'])->name('token.validate');
+//END KEYCLOACK INTEGRATION
 
 Route::post('/users', [UserController::class, 'store'])->name('users.store');
 Route::get('/users/create', [UserController::class, 'create'])->name('users.create'); 
@@ -61,4 +82,3 @@ Route::get('/movements', [MovementController::class, 'index'])->name('movements.
 Route::get('/movements/{idMovement}', [MovementController::class, 'show'])->name('movements.show');
 Route::get('/movements/{idMovement}/edit', [MovementController::class, 'edit'])->name('movements.edit'); 
 Route::put('/movements/{idMovement}/update', [MovementController::class, 'update'])->name('movements.update');
-

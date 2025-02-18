@@ -3,6 +3,7 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
+use App\Http\Middleware\AuthenticateWithKeycloak;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\SectorController;
@@ -52,3 +53,11 @@ Route::delete('suppliers/{id}', [SuppliersController::class, 'destroy'])->name('
 Route::delete('products/{id}', [ProductController::class, 'destroy'])->name('products.destroy');
 
 Route::get('notifications', [NotificationController::class, 'index']);
+
+
+
+//TESTANDO MIDDLEWARE
+
+/*Route::middleware(AuthenticateWithKeycloak::class)->group(function () {
+    Route::get('showDepartments', [SectorController::class, 'index']);
+});*/

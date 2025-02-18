@@ -1,5 +1,8 @@
 <?php
 
+use Illuminate\Support\ServiceProvider;
+
+
 return [
 
     /*
@@ -15,6 +18,10 @@ return [
 
     'name' => env('APP_NAME', 'Laravel'),
 
+    'providers' => ServiceProvider::defaultProviders()->merge([
+        \SocialiteProviders\Manager\ServiceProvider::class,
+    ])->toArray(),
+    
     /*
     |--------------------------------------------------------------------------
     | Application Environment
