@@ -10,4 +10,17 @@ class NotificationController extends Controller
         $request = Notification::all();
         return response()->json($request);
     }
+    public function update(Request $request, string $id)
+    {
+        $requestion = Notification::find($id);
+    
+        $requestion->status = 'visualizado'; 
+        $requestion->save();
+        
+        return response()->json([
+            'message' => 'Notificação atualizada com sucesso',
+            'movement' => $requestion
+        ], 200);
+    }
+
 }

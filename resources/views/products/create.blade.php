@@ -74,7 +74,7 @@
 
             <div class="form-group">
                 <label for="validity">validity:</label>
-                <input type="date" class="form-control" id="validity" name="validity" value="{{ old('validity') }}" required>
+                <input type="date" class="form-control" id="validity" name="validity" value="{{ old('validity') }}">
             </div>
 
             <div class="form-group">

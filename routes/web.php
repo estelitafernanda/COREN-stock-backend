@@ -10,7 +10,8 @@ use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\TokenController;
 
 use Laravel\Socialite\Facades\Socialite;
-
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Http;
 
 Route::get('/', function () {
@@ -19,18 +20,39 @@ Route::get('/', function () {
 
 
 //KEYCLOAK INTEGRATION
-Route::get('/keycloak/redirect', function () {
+// Route::get('/keycloak/redirect', function () {
+//     return Socialite::driver('keycloak')->redirect();
+// });
+
+// Route::get('/keycloak/callback', function () {
+//     $user = Socialite::driver('keycloak')->user();
+//     dd($user);
+// });
+
+// Route::get('logout', [TokenController::class, 'logout'])->name('logout');
+// Route::get('/token-insert', [TokenController::class, 'showTokenForm'])->name('token.form');
+// Route::post('/token-insert', [TokenController::class, 'validateToken'])->name('token.validate');
+
+Route::get('/login', function () {
     return Socialite::driver('keycloak')->redirect();
-});
+})->name('login');
 
-Route::get('/keycloak/callback', function () {
+Route::get('/login/callback', function () {
     $user = Socialite::driver('keycloak')->user();
-    dd($user);
+    Session::put('user', $user);
+    return redirect('/dashboard');
 });
 
-Route::get('logout', [TokenController::class, 'logout'])->name('logout');
-Route::get('/token-insert', [TokenController::class, 'showTokenForm'])->name('token.form');
-Route::post('/token-insert', [TokenController::class, 'validateToken'])->name('token.validate');
+Route::get('/logout', function () {
+    Session::forget('user');
+    return redirect('/');
+})->name('logout');
+
+Route::get('/dashboard', function () {
+    $user = Session::get('user');
+    return view('dashboard', compact('user'));
+})->middleware('web');
+
 //END KEYCLOACK INTEGRATION
 
 Route::post('/users', [UserController::class, 'store'])->name('users.store');

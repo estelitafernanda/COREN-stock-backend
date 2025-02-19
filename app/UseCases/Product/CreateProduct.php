@@ -22,8 +22,8 @@ class CreateProduct
             $data['image'] = strval($imageName);
         }
 
-        if ($data['validity'] === null) {
-            $data['validity'] = 'Não Perecivel';
+        if (empty($data['validity'])) {
+            $data['validity'] = null; 
         }
         
         $validated = validator($data, [

@@ -53,11 +53,20 @@ Route::delete('suppliers/{id}', [SuppliersController::class, 'destroy'])->name('
 Route::delete('products/{id}', [ProductController::class, 'destroy'])->name('products.destroy');
 
 Route::get('notifications', [NotificationController::class, 'index']);
-
+Route::patch('notifications/{id}/update', [NotificationController::class, 'update']);
 
 
 //TESTANDO MIDDLEWARE
 
-/*Route::middleware(AuthenticateWithKeycloak::class)->group(function () {
-    Route::get('showDepartments', [SectorController::class, 'index']);
-});*/
+
+Route::middleware([AuthenticateWithKeycloak::class])->group(function () {
+    Route::get('/perfil', function (Request $request) {
+        return response()->json($request->attributes->get('user'));
+    });
+
+    // Route::get('showDepartments', [SectorController::class, 'index']);
+
+    Route::get('/dados-seguros', function () {
+        return response()->json(['message' => 'Acesso autorizado a dados protegidos!']);
+    });
+});

@@ -10,17 +10,7 @@ use Illuminate\Support\Facades\Http;
 
 class TokenController extends Controller
 {
-
-    public function redirect(){
-        return Socialite::driver('keycloak')->redirect();
-    }
-
-    public function callback(){
-        $user = Socialite::driver('keycloak')->user();
-        dd($user);
-    }
-
-    
+   
     public function showTokenForm()
     {
         return view('token-insert');
