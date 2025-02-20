@@ -13,7 +13,6 @@ class AuthenticateWithKeycloak
 {
     public function handle(Request $request, Closure $next)
     {
-
         if (!$request->expectsJson()) {
             return response()->json(['error' => 'Apenas requisições JSON são permitidas'], 406);
         }
@@ -26,32 +25,22 @@ class AuthenticateWithKeycloak
         }
 
         try {
-
+            // PEGA A CHAVE PUBLICA E ARMAZENA EM CACHE MELHORANDO A PERFORMANCE
             $keys = Cache::remember('keycloak_jwks', 3600, function () {
-
-                $jwks = json_decode(file_get_contents('http://localhost:8080/realms/COREN/protocol/openid-connect/certs'), true);
-                return json_encode($jwks);
+                $jwks = file_get_contents('http://localhost:8080/realms/COREN/protocol/openid-connect/certs');
+                return $jwks ?: '{}';
             });
 
+            // Converte as chaves para um array associativo
             $keys = json_decode($keys, true);
+
+            // Converte para um formato utilizável pelo Firebase JWT
             $parsedKeys = JWK::parseKeySet($keys);
 
-            $header = JWT::decode($token, null, false);
-            $key = null;
+            // Decodifica o token diretamente sem precisar buscar a chave manualmente
+            $decoded = JWT::decode($token, $parsedKeys);
 
-            foreach ($parsedKeys as $parsedKey) {
-                if ($parsedKey['kid'] === $header->kid) {
-                    $key = $parsedKey;
-                    break;
-                }
-            }
-
-            if (!$key) {
-                return response()->json(['error' => 'Chave pública não encontrada'], 401);
-            }
-
-            $decoded = JWT::decode($token, $key, ['RS256']);
-
+            // Adiciona os dados do usuário na requisição
             $request->attributes->set('user', $decoded);
 
             return $next($request);
