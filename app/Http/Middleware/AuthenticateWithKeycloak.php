@@ -31,16 +31,16 @@ class AuthenticateWithKeycloak
                 return $jwks ?: '{}';
             });
 
-            // Converte as chaves para um array associativo
+            // CONVERSÃO DA CHAVE PARA ARRAY DE ADIÇÃO
             $keys = json_decode($keys, true);
 
-            // Converte para um formato utilizável pelo Firebase JWT
+            // CONVERTE PARA TIPOS DE DADOS ACEITOS PELO Firebase JWT
             $parsedKeys = JWK::parseKeySet($keys);
 
-            // Decodifica o token diretamente sem precisar buscar a chave manualmente
+            // DECODIFICAÇÃO DO TOKEN
             $decoded = JWT::decode($token, $parsedKeys);
 
-            // Adiciona os dados do usuário na requisição
+            // ADIÇÃO DE DADOS DO USUÁRIO
             $request->attributes->set('user', $decoded);
 
             return $next($request);
