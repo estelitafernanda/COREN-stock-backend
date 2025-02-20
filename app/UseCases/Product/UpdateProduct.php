@@ -22,7 +22,7 @@ class UpdateProduct
             'image' => 'nullable|string',
             'code' => 'required|string|max:255',
             'category' => 'required|string|max:255',
-            'idDepartment' => 'required|integer|exists:sectors,idSector',
+            'idSector' => 'required|integer|exists:sectors,idSector',
             'describe' => 'nullable|string|max:500',
             'minQuantity' => 'required|integer|min:0',
             'currentQuantity' => 'required|integer|min:0',
@@ -53,7 +53,7 @@ class UpdateProduct
             'image' => $data['image'],  // Agora o campo 'image' armazena o nome da imagem
             'code' => $validated['code'],
             'category' => $validated['category'],
-            'idDepartment' => $validated['idDepartment'],
+            'idSector' => $validated['idSector'],
             'describe' => $validated['describe'],
             'minQuantity' => $validated['minQuantity'],
             'currentQuantity' => $validated['currentQuantity'],
