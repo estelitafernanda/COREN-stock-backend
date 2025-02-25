@@ -13,9 +13,9 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware) {
-        $middleware->append([
-            AuthenticateWithKeycloak::class,
-        ]);
+        // $middleware->append([
+        //     AuthenticateWithKeycloak::class,
+        // ]);
     })
     ->withExceptions(function (Exceptions $exceptions) {
         //
