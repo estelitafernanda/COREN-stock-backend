@@ -45,7 +45,7 @@ class UserController extends Controller
      */
     public function create()
     {   
-        $user = User::all();
+        $user = User::fetchFromKeycloak();
         $sectors = Sector::all();
         return view('users.create', compact('user', 'sectors'));
     }

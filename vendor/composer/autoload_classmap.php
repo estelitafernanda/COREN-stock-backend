@@ -17,6 +17,7 @@ return array(
     'App\\Http\\Controllers\\TokenController' => $baseDir . '/app/Http/Controllers/TokenController.php',
     'App\\Http\\Controllers\\UserController' => $baseDir . '/app/Http/Controllers/UserController.php',
     'App\\Http\\Middleware\\AuthenticateWithKeycloak' => $baseDir . '/app/Http/Middleware/AuthenticateWithKeycloak.php',
+    'App\\Http\\Middleware\\CheckRole' => $baseDir . '/app/Http/Middleware/CheckRole.php',
     'App\\Models\\Movement' => $baseDir . '/app/Models/Movement.php',
     'App\\Models\\Notification' => $baseDir . '/app/Models/Notification.php',
     'App\\Models\\Product' => $baseDir . '/app/Models/Product.php',

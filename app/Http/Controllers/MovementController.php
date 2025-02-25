@@ -80,7 +80,7 @@ public function filterMovements($query)
         });
     
         $products = Product::all(); 
-        $users = User::all();
+        $users = User::fetchFromKeycloak();
 
         return response()->json($movements);
     }

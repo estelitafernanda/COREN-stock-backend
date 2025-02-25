@@ -73,7 +73,7 @@ class RequestController extends Controller
     
 
         $products = Product::all();
-        $users = User::all();
+        $users = User::fetchFromKeycloak();
     
 
         $requests->getCollection()->transform(function($request) {
@@ -100,7 +100,7 @@ class RequestController extends Controller
      */
     public function create()
     {
-        $users = User::all();
+        $users = User::fetchFromKeycloak();
         $products = Product::all();
         return view('requests.create', compact('products', 'users'));
     }
@@ -162,7 +162,7 @@ class RequestController extends Controller
     public function edit(string $id)
     {
         $products = Product::all();
-        $users = User::all();
+        $users = User::fetchFromKeycloak();
         $request = RequestModel::findOrFail($id);
         return view('requests.edit', compact('request', 'products', 'users'));
     }

@@ -40,8 +40,15 @@ class AuthenticateWithKeycloak
             // DECODIFICAÇÃO DO TOKEN
             $decoded = JWT::decode($token, $parsedKeys);
 
+            // Pegando a role do usuário
+            $roles = $decoded->role; 
+
             // ADIÇÃO DE DADOS DO USUÁRIO
             $request->attributes->set('user', $decoded);
+            $request->attributes->set('role', $roles);
+
+            Log::info('Keycloak Authentication');
+
 
             return $next($request);
         } catch (Exception $e) {
